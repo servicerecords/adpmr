@@ -15,6 +15,13 @@ class ServiceController extends Controller
      */
     public function index()
     {
+        session(['service' => ServiceBranch::RAF]);
+        session(['serviceperson-service' => ServiceBranch::getInstance()->getName(ServiceBranch::RAF)]);
+
+        Application::getInstance()->markSectionComplete(Constant::SECTION_SERVICE);
+
+        return redirect()->route('death-in-service');
+
         return view('service', [
             'branches' => ServiceBranch::getInstance()->getOptionList()
         ]);

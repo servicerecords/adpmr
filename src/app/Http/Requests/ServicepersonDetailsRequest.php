@@ -40,7 +40,7 @@ class ServicepersonDetailsRequest extends DigitalRequest
                             'Enter a valid day they joined'
                         )],
                     'serviceperson-enlisted-date-month' => ['nullable',  new Month('Enter a valid month they joined')],
-                    'serviceperson-enlisted-date-year' => 'nullable|integer|max:' . date('Y'),
+                    'serviceperson-enlisted-date-year'  => 'nullable|integer|max:' . date('Y'),
                     'serviceperson-discharged-date-day' => ['nullable',
                         new Day(
                             request()->input('serviceperson-enlisted-date-month'),

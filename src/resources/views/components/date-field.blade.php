@@ -5,11 +5,10 @@
     <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
             <h2 class="govuk-fieldset__heading govuk-!-font-weight-regular">
-                {{ $label }}
+                {{ $label }}@if(!$mandatory) <span>(optional)</span>@endif
             </h2>
         </legend>
 
-        {{--    <x-label :field="$field" :label="$label" :extra="$labelExtra" :mandatory="$mandatory" :hidden="false"></x-label>--}}
         <x-hint :hint="$hint" :field="$field"></x-hint>
         <x-error-message :field="$field"></x-error-message>
         <x-error-message :field="$field .'-day'"></x-error-message>

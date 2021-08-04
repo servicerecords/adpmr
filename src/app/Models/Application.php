@@ -115,13 +115,11 @@ class Application
                         ['label' => 'Year of discharge', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
 
-
                 case ServiceBranch::NAVY:
                 case ServiceBranch::RAF:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][2] =
                         ['label' => 'Date they left', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
-
 
                 case ServiceBranch::HOME_GUARD:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][3] =

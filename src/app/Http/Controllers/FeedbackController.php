@@ -32,7 +32,7 @@ class FeedbackController extends Controller
                 'feedback' => (null !== $request->input('feedback-improvement') ? $request->input('feedback-improvement') : 'No feedback given')
             ];
             $notifyClient->sendEmail(
-                env('FEEDBACK_EMAIL', 'liam.cusack582@mod.gov.uk'),
+                env('FEEDBACK_EMAIL', 'DBSCIO-ADPMRFeedback@mod.gov.uk'),
                 '0f3b68c3-4589-4466-a743-73f73e841187',
                 $params);
             return redirect()->route('feedback.complete');
