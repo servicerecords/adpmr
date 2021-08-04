@@ -3,9 +3,9 @@ set -e
 
 echo "============== INSTALLING CLOUD FOUNDRY CLI CLIENT =============="
 # https://github.com/cloudfoundry/cli/releases
-wget --max-redirect=1 --output-document=cf_cli_6.26.0.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.1.0&source=github-rel"
-gunzip cf_cli_6.26.0.tgz
-tar -xvf cf_cli_6.26.0.tar
+wget --max-redirect=1 --output-document=cf_cli_7.2.0.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.2.0&source=github-rel"
+gunzip cf_cli_7.2.0.tgz
+tar -xvf cf_cli_7.2.0.tar
 ls
 
 echo "============== LOGGING INTO CLOUD FOUNDRY =============="

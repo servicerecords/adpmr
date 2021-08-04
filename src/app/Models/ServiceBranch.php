@@ -6,7 +6,7 @@ namespace App\Models;
 
 class ServiceBranch
 {
-    private const FALLBACK_EMAIL = 'lauren.phillips225@mod.gov.uk';
+    private const FALLBACK_EMAIL = 'DBSCIO-ADPMRFeedback@mod.gov.uk';
     public  const NAVY           = 'NAVY';
     public  const RAF            = 'RAF';
     public  const ARMY           = 'ARMY';

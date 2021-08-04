@@ -10,7 +10,7 @@
                      :spellcheck="false"></x-textfield>
         <x-textfield label="Email address"
                      field="applicant-email-address"></x-textfield>
-        <x-textfield label="Building and street"
+        <x-textfield label="Building number or name and street"
                      extra="line 1 of 2"
                      field="applicant-address-line-1"
                      autocomplete="address-line1"
@@ -20,13 +20,13 @@
                      autocomplete="address-line2"
                      :full-width="true"
                      :hideLabel="true"></x-textfield>
-        <x-textfield label="Town"
+        <x-textfield label="Town or city"
                      autocomplete="address-level2"
                      field="applicant-address-town"></x-textfield>
         <x-textfield label="Postcode"
                      autocomplete="postal-code"
                      field="applicant-address-postcode"></x-textfield>
-        <x-country label="Country"
+        <x-country label="Country or territory"
                    field="applicant-address-country"></x-country>
         <x-textfield label="Telephone Number"
                      autocomplete="tel"
