@@ -42,17 +42,13 @@ COPY ./docker/docker-entrypoint.sh /etc/entrypoint.sh
 
 # Add Chrome for smoke testing
 RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-# RUN apt -y install ./google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb
 RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
 
-#RUN rm google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 RUN chmod 755 /etc/entrypoint.sh
 COPY docker/chromedriver /usr/local/bin/chromedriver
-
-# Bit of a clean up
-# RUN apt -y remove wget && rm -rf /var/lib/apt/lists/*
 
 # Set basic permissions
 RUN mkdir -p /app/public
@@ -67,3 +63,4 @@ EXPOSE 80
 # Fire up the entrypoint script
 CMD ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/etc/entrypoint.sh"]
+
