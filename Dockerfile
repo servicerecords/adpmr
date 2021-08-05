@@ -16,7 +16,7 @@ RUN apt -y --no-install-recommends install unzip php-mbstring \
                    libcairo2 libdrm2 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 \
                    libnss3 libpango-1.0-0 libpangocairo-1.0-0 libx11-xcb1 libxcb-dri3-0 \
                    libxcomposite1 libxdamage1 libxfixes3 libxrandr2 xdg-utils \
-                   fonts-liberation libgbm1
+                   fonts-liberation libgbm1 libxshmfence1
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
@@ -41,7 +41,7 @@ COPY ./docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ./docker/docker-entrypoint.sh /etc/entrypoint.sh
 
 # Add Chrome for smoke testing
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 # RUN apt -y install ./google-chrome-stable_current_amd64.deb
 RUN dpkg -i google-chrome-stable_current_amd64.deb
 RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
