@@ -36,7 +36,7 @@ jobs:
         - docker build -t build-image .
         - docker tag build-image:latest "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
         - docker push "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
-cdddcdcdc
+
       deploy:
         - provider: script
           skip_cleanup: true
