@@ -57,6 +57,7 @@ COPY docker/chromedriver /usr/local/bin/chromedriver
 # Set basic permissions
 RUN mkdir -p /app/public
 RUN mkdir -p /app/storage
+RUN mkdir -p /app/storage/logs
 RUN chmod -R 777 /app/public
 RUN chmod -R 777 /app/storage
 
