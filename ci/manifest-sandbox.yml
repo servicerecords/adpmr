@@ -1,8 +1,8 @@
 applications:
   - name: adpmr-dev
     routes:
-      - route: adpmr-sandbox.cloudapps.digital
-#      - route: srrdigital-sandbox.cloudapps.digital
+#      - route: adpmr-sandbox.cloudapps.digital
+      - route: srrdigital-sandbox.cloudapps.digital
     memory: 800M
     disk_quota: 2G
     instances: 1
