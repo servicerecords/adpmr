@@ -31,11 +31,12 @@ RUN chmod 755 /usr/local/bin/composer
 RUN rm composer-setup.php
 
 # Move our application into the container
+COPY src/ /app
 COPY ./docker/000-default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 COPY ./docker/php.ini /etc/php/7.3/fpm/php.ini
-COPY src/ /app
+COPY ./docker/.env-build /src/.env
 
 # Install our application dependencies
 RUN cd /app
