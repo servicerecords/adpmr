@@ -37,6 +37,12 @@ COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 COPY ./docker/php.ini /etc/php/7.3/fpm/php.ini
 COPY src/ /app
 
+# Install our application dependencies
+RUN cd /app
+RUN /usr/local/bin/composer install
+RUN npm install
+RUN npm run prod
+
 # Add the entryscript to fire up Nginx and PHP-FPM
 COPY ./docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ./docker/docker-entrypoint.sh /etc/entrypoint.sh
