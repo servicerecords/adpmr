@@ -35,6 +35,7 @@ COPY ./docker/000-default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 COPY ./docker/php.ini /etc/php/7.3/fpm/php.ini
+COPY src/ /app
 
 # Add the entryscript to fire up Nginx and PHP-FPM
 COPY ./docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
