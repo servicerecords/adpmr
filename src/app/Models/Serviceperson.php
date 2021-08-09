@@ -76,7 +76,7 @@ class Serviceperson
     }
 
     /**
-     * @return Application|null
+     * @return Serviceperson|null
      */
     public static function getInstance()
     {
