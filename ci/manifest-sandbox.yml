@@ -1,7 +1,7 @@
----
 applications:
-  - name: test-app
+  - name: adpmr-dev
     routes:
+#      - route: adpmr-sandbox.cloudapps.digital
       - route: srrdigital-sandbox.cloudapps.digital
     memory: 800M
     disk_quota: 2G

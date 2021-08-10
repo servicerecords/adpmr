@@ -4,6 +4,7 @@
 namespace App\Models;
 
 
+use App\Services\CountryService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
@@ -56,7 +57,7 @@ class Payment
                     'line2' => session('applicant-address-line-2', ''),
                     'postcode' => session('applicant-address-postcode', ''),
                     'city' => session('applicant-address-town', ''),
-                    'country' => session('applicant-address-country', '')
+                    'country' => CountryService::getInstance()->getCode(session('applicant-address-country', ''))
                 ]
             ];
         }
