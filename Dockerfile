@@ -37,6 +37,8 @@ COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 COPY ./docker/php.ini /etc/php/7.3/fpm/php.ini
 COPY ./docker/.env-build /app/.env
+RUN mkdir /root/.aws
+COPY ./docker/aws_credentials-build /root/.aws/credentials
 
 # Install our application dependencies
 RUN cd /app
