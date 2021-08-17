@@ -26,6 +26,8 @@ class Controller extends BaseController
      */
     public function callAction($method, $parameters)
     {
+        Log::info("HELLO LAUREN! FROM THE SERVER");
+
         session(['allow-usage' => Constant::NO]);
         if(isset($_COOKIE['cookies_policy'])) {
             $policy = $_COOKIE['cookies_policy'];
