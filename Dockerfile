@@ -16,7 +16,7 @@ RUN apt -y --no-install-recommends install unzip php-mbstring \
                    libcairo2 libdrm2 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 \
                    libnss3 libpango-1.0-0 libpangocairo-1.0-0 libx11-xcb1 libxcb-dri3-0 \
                    libxcomposite1 libxdamage1 libxfixes3 libxrandr2 xdg-utils \
-                   fonts-liberation libgbm1 libxshmfence1
+                   fonts-liberation libgbm1 libxshmfence1 nano
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh
@@ -37,8 +37,8 @@ COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 COPY ./docker/php.ini /etc/php/7.3/fpm/php.ini
 COPY ./docker/.env-build /app/.env
-RUN mkdir /root/.aws
-COPY ./docker/aws_credentials-build /root/.aws/credentials
+RUN mkdir /var/www/.aws
+COPY ./docker/aws_credentials-build /var/www/.aws/credentials
 
 # Install our application dependencies
 RUN cd /app
