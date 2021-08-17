@@ -114,7 +114,7 @@ return [
                     // 'region'  => 'eu-west-2', // London
                     'version' => 'latest',
                 ]),
-                'table' => 'srrdigital',
+                'table' => 'adpmr',
                 'level' => 'debug'
             ],
         ],
