@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class CookiePolicyController extends Controller
 {
@@ -24,16 +25,35 @@ class CookiePolicyController extends Controller
         'campaigns' => [],
     ];
 
+    public function callAction($method, $parameters)
+    {
+        $historic_entry = session('site_history');
+
+        if (request()->url() != request()->headers->get('referer')) {
+            $current = parse_url(request()->url());
+            $referer = parse_url(request()->headers->get('referer'));
+
+            if ($current['host'] == $referer['host']) {
+                session()->flash('site_history', request()->headers->get('referer'));
+            }
+        } else {
+            session()->flash('site_history', $historic_entry);
+        }
+
+        return parent::callAction($method, $parameters);
+    }
+
     public function index()
     {
         return view('cookie-policy', [
-            'cookies' => $this->cookies
+            'cookies' => $this->cookies,
+            'back_link' => session('site_history', false)
         ]);
     }
 
-    public function save(Request $request)
+    public function save()
     {
         session()->flash('flash', 'Your cookie settings were saved');
-       return redirect()->route('cookie-policy');
+        return redirect()->route('cookie-policy');
     }
 }

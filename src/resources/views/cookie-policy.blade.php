@@ -1,11 +1,11 @@
-@extends('layouts.app', ['title' => 'Cookie statement - '])
+@extends('layouts.app', ['title' => 'Cookie statement - ', 'backLink' => $back_link])
 @section('pageTitle', 'Cookies on Apply for a deceased’s military record')
 
 @push('scripts')
-<script>
-    window.GOVUKFrontend.CookieBanner.setCookieConsent()
-    window.GOVUKFrontend.CookieBanner.hideCookieMessage()
-</script>
+    <script>
+        window.GOVUKFrontend.CookieBanner.setCookieConsent()
+        window.GOVUKFrontend.CookieBanner.hideCookieMessage()
+    </script>
 @endpush
 
 @section('content')
