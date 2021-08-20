@@ -29,15 +29,19 @@ class CookiePolicyController extends Controller
     {
         $historic_entry = session('site_history');
 
-        if (request()->url() != request()->headers->get('referer')) {
-            $current = parse_url(request()->url());
-            $referer = parse_url(request()->headers->get('referer'));
+        if (request()->headers->get('referer')) {
+            if (request()->url() != request()->headers->get('referer')) {
+                $current = parse_url(request()->url());
+                $referer = parse_url(request()->headers->get('referer'));
 
-            if ($current['host'] == $referer['host']) {
-                session()->flash('site_history', request()->headers->get('referer'));
+                if ($current['host'] == $referer['host']) {
+                    session()->flash('site_history', request()->headers->get('referer'));
+                }
+            } else {
+                session()->flash('site_history', $historic_entry);
             }
         } else {
-            session()->flash('site_history', $historic_entry);
+            session()->forget('site_history');
         }
 
         return parent::callAction($method, $parameters);
