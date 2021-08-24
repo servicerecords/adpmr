@@ -38,7 +38,7 @@ jobs:
         - sed -ri "s|AWS_SECRET|$AWS_SECRET|" ./docker/aws_credentials-build
         - docker build -t build-image .
         - docker tag build-image:latest "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
-        - docker push -q "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
+        - docker push --quiet "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
 
       deploy:
         - provider: script
