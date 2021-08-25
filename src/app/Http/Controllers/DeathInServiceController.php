@@ -56,13 +56,23 @@ class DeathInServiceController extends Controller
      */
     public function save(DeathInServiceRequest $request)
     {
+        // Check if we have previously answered this question
+        // If we have, we need to set the subsequent step as incomplete
+        $previousAnswer = session('serviceperson-died-in-service', null);
+        if(!is_null($previousAnswer )) {
+            if($previousAnswer !== request()->input('serviceperson-died-in-service')) {
+                Application::getInstance()->markSectionInComplete(Constant::SECTION_ESSENTIAL_INFO);
+            }
+        }
+
         foreach ($this->fields as $field) {
             session([$field => $request->input($field)]);
         }
 
         Application::getInstance()->markSectionComplete(Constant::SECTION_DIED_IN_SERVICE);
 
-        if(Application::getInstance()->sectionComplete(Constant::SECTION_CHECK_ANSWERS)) {
+        if(Application::getInstance()->sectionComplete(Constant::SECTION_CHECK_ANSWERS) &&
+           Application::getInstance()->sectionComplete(Constant::SECTION_ESSENTIAL_INFO)) {
             return redirect()->route('check-answers');
         }
 

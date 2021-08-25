@@ -11,7 +11,7 @@
                 @if(\Illuminate\Support\Str::endsWith($row['field'], 'date'))
                     <a class="govuk-link" href="{{ route($row['route']) }}#{{$row['field']}}-day">Change<span
                             class="govuk-visually-hidden"> {{ $row['change'] ?? '' }}</span></a>
-                @else
+                @elseif($row['label'] !== 'Service')
                 <a class="govuk-link" href="{{ route($row['route']) }}#{{$row['field']}}">Change<span
                         class="govuk-visually-hidden"> {{ $row['change'] ?? '' }}</span></a>
                 @endif

@@ -29,6 +29,9 @@ class EssentialInformationController extends Controller
         return view('essential-information');
     }
 
+
+
+    #
     /**
      * @param EssentialInformationRequest $request
      * @return \Illuminate\Http\RedirectResponse

@@ -14,6 +14,10 @@ class Constant
     public const MONTH_PLACEHOLDER = 'MM';
     public const YEAR_PLACEHOLDER = 'YYYY';
 
+    public const DAY_ZERO_PLACEHOLDER = '00';
+    public const MONTH_ZERO_PLACEHOLDER = '00';
+    public const YEAR_ZERO_PLACEHOLDER = '0000';
+
     public const RELATION_UNRELATED = 'I am not related';
     public const RELATION_SPOUSE = 'I am their spouse or civil partner';
     public const RELATION_CHILD = 'I am their son or daughter';

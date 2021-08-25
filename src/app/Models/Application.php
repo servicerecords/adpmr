@@ -7,6 +7,7 @@ namespace App\Models;
 use Alphagov\Notifications\Exception\ApiException;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidPeriodParameterException;
+use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -115,13 +116,11 @@ class Application
                         ['label' => 'Year of discharge', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
 
-
                 case ServiceBranch::NAVY:
                 case ServiceBranch::RAF:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][2] =
                         ['label' => 'Date they left', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
-
 
                 case ServiceBranch::HOME_GUARD:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][3] =
@@ -384,9 +383,9 @@ class Application
         $day = $month = $year = '';
 
         if ($field === 'serviceperson-date-of-birth-date') {
-            $day = session('serviceperson-date-of-birth-date-day', Constant::DAY_PLACEHOLDER);
-            $month = session('serviceperson-date-of-birth-date-month', Constant::MONTH_PLACEHOLDER);
-            $year = session('serviceperson-date-of-birth-date-year', Constant::YEAR_PLACEHOLDER);
+            $day = session('serviceperson-date-of-birth-date-day', Constant::DAY_ZERO_PLACEHOLDER);
+            $month = session('serviceperson-date-of-birth-date-month', Constant::MONTH_ZERO_PLACEHOLDER);
+            $year = session('serviceperson-date-of-birth-date-year', Constant::YEAR_ZERO_PLACEHOLDER);
         } else {
             $fields = ServiceBranch::getInstance()->getFields(
                 session('service', ServiceBranch::ARMY),
@@ -394,36 +393,61 @@ class Application
             );
 
             if (array_key_exists($field . '-day', array_flip($fields))) {
-                $day = session($field   . '-day', Constant::DAY_PLACEHOLDER);
+                $day = session($field   . '-day', Constant::DAY_ZERO_PLACEHOLDER);
             }
 
             if (array_key_exists($field . '-month', array_flip($fields))) {
-                $month = session($field . '-month', Constant::MONTH_PLACEHOLDER);
+                $month = session($field . '-month', Constant::MONTH_ZERO_PLACEHOLDER);
             }
 
             if (array_key_exists($field . '-year', array_flip($fields))) {
-                $year = session($field . '-year', Constant::YEAR_PLACEHOLDER);
+                $year = session($field . '-year', Constant::YEAR_ZERO_PLACEHOLDER);
             }
         }
 
-        if (trim($day) == '') $day = Constant::DAY_PLACEHOLDER;
+        if (trim($day) == '') $day = Constant::DAY_ZERO_PLACEHOLDER;
         else $day = sprintf('%02d', $day);
 
-        if (trim($month) == '') $month = Constant::MONTH_PLACEHOLDER;
+        if (trim($month) == '') $month = Constant::MONTH_ZERO_PLACEHOLDER;
         else $month = sprintf('%02d', $month);
 
-        if (trim($year) == '') $year = Constant::YEAR_PLACEHOLDER;
+        if (trim($year) == '') $year = Constant::YEAR_ZERO_PLACEHOLDER;
         else $year = sprintf('%04d', $year);
 
-        if ($day !== Constant::DAY_PLACEHOLDER && $month !== Constant::MONTH_PLACEHOLDER && $year !== Constant::YEAR_PLACEHOLDER) {
-            try {
-                $date = Carbon::create($year, $month, $day);
-                return $date->format('j F Y');
-            } catch (Exception $e) {
-            }
+//        if ($day !== Constant::DAY_ZERO_PLACEHOLDER && $month !== Constant::MONTH_ZERO_PLACEHOLDER && $year !== Constant::YEAR_ZERO_PLACEHOLDER) {
+//            try {
+//                $date = Carbon::create($year, $month, $day);
+//                return $date->format('j F Y');
+//            } catch (Exception $e) {
+//            }
+//        }
+
+        // dd( $year . '-' . $month . '-' . $day);
+        return $this->formatDateResponse($year . '-' . $month . '-' . $day);
+    }
+
+    /**
+     * @param $response
+     * @return string
+     */
+    public function formatDateResponse($response)
+    {
+        list($year, $month, $day) = explode('-', $response);
+
+        $dateResponse = [];
+        if ($year == '0000' || $month == '00' || $day == '00') {
+            if ($day !== '00') array_push($dateResponse, $day);
+
+            array_push($dateResponse,
+                ($month !== '00') ? (DateTime::createFromFormat('!m', $month))->format('F')
+                    : (($day !== '00') ? 'Unknown month' : false));
+
+            if ($year !== '0000') array_push($dateResponse, $year);
+        } else {
+            $dateResponse = explode('-', \Illuminate\Support\Carbon::createFromFormat('Y-m-d', $response)->format('d F Y'));
         }
 
-        return $day . '-' . $month . '-' . $year;
+        return (sizeof($dateResponse) > 0) ? trim(join(' ', $dateResponse)) : 'Not answered';
     }
 
     /**
