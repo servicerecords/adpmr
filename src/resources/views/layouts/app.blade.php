@@ -49,7 +49,7 @@
     <main class="govuk-main-wrapper" id="main-content" role="main">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <x-success-alert></x-success-alert>
+                <x-success-alert :backLink="$back_link ?? false"></x-success-alert>
 
                 <h1 class="govuk-heading-l">
                     @yield('pageTitle')

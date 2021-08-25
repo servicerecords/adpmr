@@ -1,7 +1,7 @@
----
 applications:
   - name: test-app
     routes:
+      - route: adpmr-production.cloudapps.digital
       - route: srrdigital-production.cloudapps.digital
     memory: 800M
     disk_quota: 2G

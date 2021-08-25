@@ -161,12 +161,12 @@ class Application
 
             if (session('serviceperson-died-in-service', Constant::YES) == 'Yes') {
                 if (session('service') == ServiceBranch::HOME_GUARD) {
-                    session('label-serviceperson-discharged', 'Date of death in service');
+                    session(['label-serviceperson-discharged' => 'Date of death in service']);
                 } else {
-                    session('label-serviceperson-discharged', 'Date of death');
+                    session(['label-serviceperson-discharged' => 'Date of death']);
                 }
             } else {
-                session('label-serviceperson-discharged', 'Date they left');
+                session(['label-serviceperson-discharged' => 'Date they left']);
             }
         }
 
@@ -311,14 +311,22 @@ class Application
 
             foreach ($properties as $property => $propertyValue) {
                 if (session()->has($property)) {
-                    $data[$property] = session($property, 'n/a');
+                    $data[$property] = session($property, 'Field left blank');
                 } else {
-                    $data[$property] = 'n/a';
+                    $data[$property] = 'Field left blank';
+
+                    if (Str::endsWith($property, '-date')) {
+                        $data[$property] = $this->generateDateString($property);
+
+                        if(!$data[$property]) {
+                            $data[$property] = 'Field left blank';
+                        }
+                    }
                 }
             }
         }
 
-        $response = $notify->sendEmail(
+        $notify->sendEmail(
             ServiceBranch::getInstance()->getEmailAddress(session('service')),
             $templateId,
             $data,
@@ -414,15 +422,6 @@ class Application
         if (trim($year) == '') $year = Constant::YEAR_ZERO_PLACEHOLDER;
         else $year = sprintf('%04d', $year);
 
-//        if ($day !== Constant::DAY_ZERO_PLACEHOLDER && $month !== Constant::MONTH_ZERO_PLACEHOLDER && $year !== Constant::YEAR_ZERO_PLACEHOLDER) {
-//            try {
-//                $date = Carbon::create($year, $month, $day);
-//                return $date->format('j F Y');
-//            } catch (Exception $e) {
-//            }
-//        }
-
-        // dd( $year . '-' . $month . '-' . $day);
         return $this->formatDateResponse($year . '-' . $month . '-' . $day);
     }
 

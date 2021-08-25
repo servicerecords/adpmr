@@ -25,6 +25,7 @@ class ConfirmationController extends Controller
 
         if(session('application-reference', false)) {
             session(['payment-status' => 'Paid']);
+            $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 
@@ -44,6 +45,7 @@ class ConfirmationController extends Controller
 
         if($application->isFree()) {
             session(['payment-status' => 'Exempt']);
+            $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 

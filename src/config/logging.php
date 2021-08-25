@@ -109,12 +109,11 @@ return [
             'formatter' => ScalarFormatter::class,
             'with' => [
                 'client' => new DynamoDbClient([
-                    'profile' => 'srrdigital',
+                    'profile' => 'adpmr',
                     'region' => 'eu-west-1', // Ireland
-                    // 'region'  => 'eu-west-2', // London
                     'version' => 'latest',
                 ]),
-                'table' => 'srrdigital',
+                'table' => 'adpmr',
                 'level' => 'debug'
             ],
         ],
