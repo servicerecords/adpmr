@@ -1,5 +1,5 @@
 @extends('layouts.app', ['title' => 'Cookie statement - ', 'backLink' => $back_link])
-@section('pageTitle', 'Cookies on Apply for a deceased’s military record')
+@section('pageTitle', 'Cookies on ' . env('APP_NAME', 'Apply for a deceased\'s military record'))
 
 @push('scripts')
     <script>
@@ -10,7 +10,7 @@
 
 @section('content')
     <p class="govuk-body">Cookies are files saved on your computer, tablet or telephone when you visit a website.
-        The online Apply for a deceased’s military record service puts cookies onto your computer in order to:</p>
+        The online {{  env('APP_NAME', 'Apply for a deceased\'s military record') }} service puts cookies onto your computer in order to:</p>
     <ul class="govuk-list govuk-list--bullet">
         <li>remember what messages you’ve seen so you’re not shown them again</li>
         <li>understand how you use the service so we can update and improve it</li>
