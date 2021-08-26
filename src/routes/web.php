@@ -29,6 +29,8 @@ Route::post('/check-answers', [\App\Http\Controllers\CheckAnswersController::cla
 Route::get('/confirmation/{uuid}', [\App\Http\Controllers\ConfirmationController::class, 'paid'])->name('confirmation');
 Route::get('/confirmation', [\App\Http\Controllers\ConfirmationController::class, 'free'])->name('confirmation');
 Route::get('/complete', [\App\Http\Controllers\ConfirmationController::class, 'complete'])->name('confirmation.complete');
+Route::get('/payment-complete', [\App\Http\Controllers\ConfirmationController::class, 'complete'])->name('confirmation.complete');
+Route::get('/application-complete', [\App\Http\Controllers\ConfirmationController::class, 'complete'])->name('confirmation.complete');
 Route::get('/cancel-application', [\App\Http\Controllers\CancelApplicationController::class, 'index'])->name('cancel-application');
 Route::post('/cancel-application', [\App\Http\Controllers\CancelApplicationController::class, 'index'])->name('cancel-application.save');
 
