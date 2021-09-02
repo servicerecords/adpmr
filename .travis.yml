@@ -13,7 +13,7 @@ jobs:
       script:
         - echo "$DOCKER_SECRET" | docker login -u "$DOCKER_USER" docker.io --password-stdin
         - ls
-        - car Dockerfile
+        - cat Dockerfile
         - chmod 755 ci/deploy_to_cf.sh
         - chmod 755 ci/zero_downtime.sh
         - cp docker/.env docker/.env-build
