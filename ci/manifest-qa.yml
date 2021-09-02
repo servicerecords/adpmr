@@ -1,7 +1,6 @@
 applications:
-  - name: adpmr-qa
+  - name: active
     routes:
-      - route: srrdigital-qa.cloudapps.digital
       - route: adpmr-qa.cloudapps.digital
     memory: 800M
     disk_quota: 2G
