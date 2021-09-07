@@ -42,10 +42,10 @@ class Payment
         session(['payment-reference' => str_replace('-', '', Uuid::uuid4()->toString())]);
 
         $data = [
-            'amount' => 3000,
+            'amount' => env('BILLABLE_AMOUNT', 3000),
             'reference' => session('application-reference'),
             'description' => 'Service Record Application',
-            'return_url' => env('APP_URL', 'https://srrdigital-sandbox.cloudapps.digital') . '/confirmation/' . session('payment-reference'),
+            'return_url' => env('APP_URL', 'https://adpmr-sandbox.cloudapps.digital') . '/confirmation/' . session('payment-reference'),
             'email' => session('applicant-email-address', '')
         ];
 

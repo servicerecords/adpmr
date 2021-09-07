@@ -163,7 +163,7 @@ class Application
                 if (session('service') == ServiceBranch::HOME_GUARD) {
                     session(['label-serviceperson-discharged' => 'Date of death in service']);
                 } else {
-                    session(['label-serviceperson-discharged' => 'Date of death']);
+                    session(['label-serviceperson-discharged' => 'Service end date']);
                 }
             } else {
                 session(['label-serviceperson-discharged' => 'Date they left']);

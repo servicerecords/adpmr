@@ -1,6 +1,5 @@
----
 applications:
-  - name: srrdigital-dev
+  - name: adpmr-dev
     memory: 1G
     disk_quota: 2G
     docker:

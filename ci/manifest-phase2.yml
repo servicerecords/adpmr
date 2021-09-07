@@ -1,9 +1,9 @@
 applications:
   - name: active
     routes:
-      - route: adpmr-sandbox.cloudapps.digital
+      - route: adpmr-phase2.cloudapps.digital
     memory: 800M
     disk_quota: 2G
     instances: 1
     docker:
-      image: codesure/srrdigital:sandbox
+      image: codesure/adpmr:phase2

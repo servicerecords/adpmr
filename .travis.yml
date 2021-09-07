@@ -9,10 +9,11 @@ env:
 jobs:
   include:
     - stage: Build Docker Image for branch
-      if: branch IN ("sandbox", "qa", "master")
+      if: branch IN ("sandbox", "qa", "master", "phase2")
       script:
         - echo "$DOCKER_SECRET" | docker login -u "$DOCKER_USER" docker.io --password-stdin
         - ls
+        - cat Dockerfile
         - chmod 755 ci/deploy_to_cf.sh
         - chmod 755 ci/zero_downtime.sh
         - cp docker/.env docker/.env-build
@@ -37,10 +38,16 @@ jobs:
         - sed -ri "s|AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/aws_credentials-build
         - sed -ri "s|AWS_SECRET|$AWS_SECRET|" ./docker/aws_credentials-build
         - docker build -t build-image .
-        - docker tag build-image:latest "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
-        - docker push "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
+        - docker tag build-image:latest "$DOCKER_ORGANISATION"/adpmr:"$DOCKER_TAG"
+        - docker push "$DOCKER_ORGANISATION"/adpmr:"$DOCKER_TAG"
 
       deploy:
+        - provider: script
+          skip_cleanup: false
+          manifest: manifest-phase2.yml
+          script: env CF_SPACE=development CF_APP_NAME=phase2 CF_MANIFEST=ci/manifest-phase2.yml ci/deploy_to_cf.sh
+          on:
+            branch: phase2
         - provider: script
           skip_cleanup: true
           manifest: manifest-sandbox.yml
@@ -64,10 +71,10 @@ notifications:
   email:
     recipients:
       - toby@codesure.co.uk
-
+      - lauren.phillips225@mod.gov.uk
 
 #    if: branch IN ("qa","master")
 #      recipients:
 #        - amanda.moran637@mod.gov.uk
-#        - lauren.phillips225@mod.gov.uk
+#
 #      on_success: always
