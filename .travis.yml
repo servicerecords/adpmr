@@ -32,6 +32,7 @@ jobs:
         - sed -ri "s|ENV_AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/.env-build
         - sed -ri "s|ENV_AWS_SECRET|$AWS_SECRET|" ./docker/.env-build
         - sed -ri "s|ENV_GA_ID|$GA_ID|" ./docker/.env-build
+        - sed -ri "s|ENV_LOGGLY_KEY|$LOGGLY_KEY|" ./docker/.env-build
         - cat docker/.env-build
         - cp docker/aws_credentials docker/aws_credentials-build
         - sed -ri "s|AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/aws_credentials-build
