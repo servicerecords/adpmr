@@ -43,7 +43,7 @@ jobs:
 
       deploy:
         - provider: script
-          skip_cleanup: false
+          skip_cleanup: true
           manifest: manifest-phase2.yml
           script: env CF_SPACE=development CF_APP_NAME=phase2 CF_MANIFEST=ci/manifest-phase2.yml ci/deploy_to_cf.sh
           on:
