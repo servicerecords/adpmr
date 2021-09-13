@@ -71,7 +71,7 @@ notifications:
   email:
     recipients:
       - toby@codesure.co.uk
-      - lauren.phillips225@mod.gov.uk
+#      - lauren.phillips225@mod.gov.uk
 
 #    if: branch IN ("qa","master")
 #      recipients:
