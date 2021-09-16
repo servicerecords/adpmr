@@ -154,6 +154,8 @@ class ServiceBranch
                 'EMAIL_ADDRESS' => env('LAND_EMAIL', self::FALLBACK_EMAIL)
             ],
         ];
+
+        unset($this->branches[self::ARMY], $this->branches[self::HOME_GUARD]);
     }
 
     /**
