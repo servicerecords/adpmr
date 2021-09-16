@@ -18,30 +18,21 @@ RUN apt -y --no-install-recommends install unzip php-mbstring \
                    libxcomposite1 libxdamage1 libxfixes3 libxrandr2 xdg-utils \
                    fonts-liberation libgbm1 libxshmfence1
 
-# RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
-# RUN bash nodesource_setup.sh
-# RUN rm nodesource_setup.sh
-# RUN apt -y --no-install-recommends install nodejs yarn
+RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN rm nodesource_setup.sh
+RUN apt -y --no-install-recommends install nodejs yarn
+RUN pwd
 
-# COPY docker/composer-setup.php /app/composer-setup.php
-# RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+COPY docker/composer-setup.php /app/composer-setup.php
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 # RUN mv composer.phar /usr/local/bin/composer
-# RUN chmod 755 /usr/local/bin/composer
-# RUN rm composer-setup.php
+RUN chmod 755 /usr/local/bin/composer
+RUN rm composer-setup.php
 
 # Move our application into the container
 
-COPY src/ /app
-RUN rm -rf /app/app
-RUN rm -rf /app/bootstrap
-RUN rm -rf /app/config
-RUN rm -rf /app/database
-RUN rm -rf /app/public
-RUN rm -rf /app/resources
-RUN rm -rf /app/routes
-RUN rm -rf /app/storage
-RUN rm -rf /app/tests
-RUN rm -rf /app/tests
+# COPY src/ /app
 COPY ./docker/000-default.conf /etc/nginx/conf.d/default.conf
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
@@ -52,18 +43,18 @@ COPY ./docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ./docker/docker-entrypoint.sh /etc/entrypoint.sh
 
 # Add Chrome for smoke testing
-# RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-# RUN dpkg -i google-chrome-stable_current_amd64.deb
-# RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb
+RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
 
-# RUN rm google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 RUN chmod 755 /etc/entrypoint.sh
-# COPY docker/chromedriver /usr/local/bin/chromedriver
+COPY docker/chromedriver /usr/local/bin/chromedriver
 
 # Expose our HTTP port to the Host
 EXPOSE 80
 
 # Fire up the entrypoint script
-# CMD ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/etc/entrypoint.sh"]
