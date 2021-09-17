@@ -1,5 +1,5 @@
 applications:
-  - name: active
+  - name: phase2
     routes:
       - route: adpmr-phase2.cloudapps.digital
     memory: 800M
