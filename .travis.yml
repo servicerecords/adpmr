@@ -39,6 +39,8 @@ jobs:
         - sed -ri "s|AWS_SECRET|$AWS_SECRET|" ./docker/aws_credentials-build
         - docker build -t build-image .
         - docker tag build-image:latest "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
+        - pip install --user awscli
+        - export PATH=$PATH:$HOME/.local/bin
         - aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$AWS_REPO_URL"
         - docker push "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
 
