@@ -400,7 +400,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   };
 
   window.GOVUK.setUsageCookieValue = function (value) {
-    console.log('Setting usaage to: ', value);
     var consentCookie = window.GOVUK.getConsentCookie();
     consentCookie['usage'] = value;
     window.GOVUK.setCookie('cookies_policy', JSON.stringify(consentCookie), {
@@ -589,9 +588,9 @@ window.GOVUKFrontend.CookieBanner = {
     this.showCookieMessage();
   },
   showCookieMessage: function showCookieMessage() {
-    var shouldHaveCoookieMessage = window.GOVUK.cookie('cookies_preferences_set') !== 'true';
+    var shouldHaveCookieMessage = window.GOVUK.cookie('cookies_preferences_set') !== 'true';
 
-    if (shouldHaveCoookieMessage) {
+    if (shouldHaveCookieMessage) {
       if (this.cookieBanner) {
         this.cookieBanner.style.display = 'block';
 
@@ -663,6 +662,52 @@ if (cookiePreferenceForm) {
     }
   });
 }
+
+var cookieBanner = document.getElementById('govuk-cookie-banner');
+var cookieSections = document.querySelectorAll('#govuk-cookie-banner .govuk-cookie-banner__message');
+var shouldHaveCookieMessage = window.GOVUK.cookie('cookies_preferences_set') !== 'true';
+
+if (shouldHaveCookieMessage) {
+  cookieBanner.style.display = 'block';
+}
+
+document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').forEach(function (element) {
+  element.addEventListener('click', function (event) {
+    switch (event.target.value) {
+      case 'accept':
+        window.GOVUK.setUsageCookieValue(true);
+        window.GOVUK.cookie('cookies_preferences_set', 'true', {
+          days: 0
+        });
+        cookieSections[0].style.display = 'none';
+        cookieSections[1].style.display = '';
+        break;
+
+      case 'reject':
+        window.GOVUK.setUsageCookieValue(false);
+        window.GOVUK.cookie('cookies_preferences_set', 'true', {
+          days: 0
+        });
+        cookieSections[0].style.display = 'none';
+        cookieSections[1].style.display = '';
+        break;
+
+      default:
+        var target = event.currentTarget;
+
+        if (target.dataset.hasOwnProperty('module') && target.dataset.hasOwnProperty('action')) {
+          switch (target.dataset['action']) {
+            case 'hide-cookie-banner':
+              cookieBanner.style.display = 'none';
+              cookieSections[0].style.display = 'none';
+              cookieSections[1].style.display = 'none';
+              break;
+          }
+        }
+
+    }
+  });
+});
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
