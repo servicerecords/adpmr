@@ -11,9 +11,6 @@ jobs:
     - stage: Build Docker Image for branch
       if: branch IN ("sandbox", "qa", "master", "phase2")
       script:
-#        - echo "$DOCKER_SECRET" | docker login -u "$DOCKER_USER" docker.io --password-stdin
-#        - ls
-        - cat Dockerfile
         - chmod 755 ci/deploy_to_cf.sh
         - chmod 755 ci/zero_downtime.sh
         - cp docker/.env docker/.env-build
@@ -54,7 +51,7 @@ jobs:
         - provider: script
           skip_cleanup: true
           manifest: manifest-sandbox.yml
-          script: env CF_SPACE=development CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-sandbox.yml ci/deploy_to_cf.sh
+          script: env CF_SPACE=development CF_APP_NAME=active CF_MANIFEST=ci/manifest-sandbox.yml ci/deploy_to_cf.sh
           on:
             branch: sandbox
         - provider: script
