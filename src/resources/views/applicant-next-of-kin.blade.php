@@ -13,10 +13,10 @@
         <div class="govuk-details__text {{ $errors->first('applicant-next-of-kin') ? ' govuk-!-margin-bottom-7': 'govuk-!-margin-bottom-4' }}">
             <ul class="govuk-list govuk-list--bullet">
                 <li>Spouse or Civil Partner</li>
-                <li>Son or Daughter</li>
+                <li>Child</li>
                 <li>Grandchild</li>
-                <li>Mother  or  Father</li>
-                <li>Brother or Sister</li>
+                <li>Parent</li>
+                <li>Sibling</li>
                 <li>Niece or Nephew</li>
                 <li>Grandparent</li>
                 <li>Other</li>
