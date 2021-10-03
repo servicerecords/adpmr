@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "govuk-country-and-territory-autocomplete": "^1.0.1",
-        "govuk-frontend": "^3.13.1"
+        "govuk-frontend": "^3.13.1",
+        "libphonenumber-js": "^1.9.34"
     }
 }
