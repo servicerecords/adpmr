@@ -1,4 +1,4 @@
-FROM codesure/srrdigital:baseline
+FROM 831999517078.dkr.ecr.eu-west-1.amazonaws.com/adpmr:baseline
 
 COPY ./docker/.env-build /app/.env
 COPY src/ /app
