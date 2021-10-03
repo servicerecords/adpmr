@@ -358,10 +358,14 @@ document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').
 });
 
 function formatTelephoneNumber(country, value) {
-    const phoneNumber = new AsYouType('GB')
+    if(countryInput.selectedIndex > 0) {
+        country = countryInput.options[countryInput.selectedIndex].getAttribute('data-iso')
+    }
+
+    const phoneNumber = new AsYouType(country ?? 'GB')
     phoneNumber.input(value)
 
-    const formattedNumber = new AsYouType('GB')
+    const formattedNumber = new AsYouType(country ?? 'GB')
     formattedNumber.input(phoneNumber.getNumber().number)
 
     return formattedNumber.formattedOutput

@@ -9554,9 +9554,15 @@ document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').
 });
 
 function formatTelephoneNumber(country, value) {
-  var phoneNumber = new libphonenumber_js__WEBPACK_IMPORTED_MODULE_0__["AsYouType"]('GB');
+  var _country, _country2;
+
+  if (countryInput.selectedIndex > 0) {
+    country = countryInput.options[countryInput.selectedIndex].getAttribute('data-iso');
+  }
+
+  var phoneNumber = new libphonenumber_js__WEBPACK_IMPORTED_MODULE_0__["AsYouType"]((_country = country) !== null && _country !== void 0 ? _country : 'GB');
   phoneNumber.input(value);
-  var formattedNumber = new libphonenumber_js__WEBPACK_IMPORTED_MODULE_0__["AsYouType"]('GB');
+  var formattedNumber = new libphonenumber_js__WEBPACK_IMPORTED_MODULE_0__["AsYouType"]((_country2 = country) !== null && _country2 !== void 0 ? _country2 : 'GB');
   formattedNumber.input(phoneNumber.getNumber().number);
   return formattedNumber.formattedOutput;
 }

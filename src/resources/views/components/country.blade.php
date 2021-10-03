@@ -9,7 +9,7 @@
             autocomplete="new-password">
         <option></option>
         @foreach($countries as $country)
-            <option value="{{ $country[0] }}"
+            <option value="{{ $country[0] }}" data-iso="{{ substr(explode(':', $country[1])[1], 0, 2) }}"
                     @if(old($field, session($field)) === $country[0]) selected @endif >{{ $country[0] }}</option>
         @endforeach
     </select>
