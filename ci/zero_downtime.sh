@@ -17,7 +17,8 @@ fi
 #   by virtue of them having the same route mapped at this point, and CF's
 #   distribution over mappings of the same kind:
 # ./cf push ${CF_APP_NAME}_new -f ${CF_MANIFEST}
-./cf push -f ${CF_MANIFEST} --strategy rolling
+# ./cf push -f ${CF_MANIFEST} --strategy rolling
+CF_DOCKER_PASSWORD=${AWS_SECRET_ACCESS_KEY} ./cf push -f ${CF_MANIFEST} --strategy rolling --docker-image ${AWS_CONTAINER_IMAGE} --docker-username ${AWS_ACCESS_KEY_ID}
 
 # CAN RUN SMOKE TEST AGAINST _NEW APP BEFORE PROCEEDING
 # (can map a new route to the _new app and reference this in smoke test configs)

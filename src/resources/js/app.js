@@ -1,6 +1,8 @@
 // require('./bootstrap');
 // require('./analytics');
 
+import {AsYouType, parsePhoneNumber} from "libphonenumber-js";
+
 (function (root) {
     'use strict'
     window.GOVUK = window.GOVUK || {}
@@ -319,7 +321,7 @@ const cookieBanner = document.getElementById('govuk-cookie-banner')
 const cookieSections = document.querySelectorAll('#govuk-cookie-banner .govuk-cookie-banner__message')
 const shouldHaveCookieMessage = (window.GOVUK.cookie('cookies_preferences_set')) !== 'true'
 
-if(shouldHaveCookieMessage) {
+if (shouldHaveCookieMessage) {
     cookieBanner.style.display = 'block';
 }
 
@@ -342,8 +344,8 @@ document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').
                 break;
             default:
                 const target = event.currentTarget
-                if(target.dataset.hasOwnProperty('module') && target.dataset.hasOwnProperty('action')) {
-                    switch(target.dataset['action']) {
+                if (target.dataset.hasOwnProperty('module') && target.dataset.hasOwnProperty('action')) {
+                    switch (target.dataset['action']) {
                         case 'hide-cookie-banner':
                             cookieBanner.style.display = 'none';
                             cookieSections[0].style.display = 'none'
@@ -354,3 +356,27 @@ document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').
         }
     })
 });
+
+function formatTelephoneNumber(country, value) {
+    const phoneNumber = new AsYouType('GB')
+    phoneNumber.input(value)
+
+    const formattedNumber = new AsYouType('GB')
+    formattedNumber.input(phoneNumber.getNumber().number)
+
+    return formattedNumber.formattedOutput
+}
+
+const telephoneInput = document.getElementById('applicant-telephone')
+const countryInput = document.getElementById('applicant-address-country')
+
+if (telephoneInput && countryInput) {
+    telephoneInput.addEventListener('change', (element) => {
+        element.target.value = formatTelephoneNumber('GB', element.target.value)
+    })
+
+    telephoneInput.addEventListener('keyup', (element) => {
+        element.target.value = formatTelephoneNumber('GB', element.target.value)
+    })
+}
+
