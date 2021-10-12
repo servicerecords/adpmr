@@ -40,13 +40,13 @@ class Payment
     public function getPaymentUrl()
     {
         session(['payment-reference' => str_replace('-', '', Uuid::uuid4()->toString())]);
-        $return_url = env('APP_URL', 'https://adpmr-sandbox.cloudapps.digital') . '/confirmation/' . session('payment-reference');
+        $return_url = env('GOV_PAY_RETURN_URL', 'https://adpmr-sandbox.cloudapps.digital') . '/confirmation/' . session('payment-reference');
 
         $data = [
             'amount' => 3000,
             'reference' => session('application-reference'),
             'description' => 'Service Record Application',
-            'return_url' => env('APP_URL', 'https://srrdigital-sandbox.cloudapps.digital') . '/confirmation/' . session('payment-reference'),
+            'return_url' => $return_url,
             'email' => session('applicant-email-address', '')
         ];
         
