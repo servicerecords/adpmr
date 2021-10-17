@@ -26,8 +26,14 @@ jobs:
         - sed -ri "s|ENV_GOV_PAY_API_KEY|$GOV_PAY_API_KEY|" ./docker/.env-build
         - sed -ri "s|ENV_GOV_PAY_RETURN_URL|$GOV_PAY_RETURN_URL|" ./docker/.env-build
         - sed -ri "s|ENV_NOTIFY_API_KEY|$NOTIFY_API_KEY|" ./docker/.env-build
+        
+        - sed -ri "s|ENV_AWS_ACCESS_KEY_ID|$AWS_ACCESS_KEY_ID|" ./docker/.env-build
+        - sed -ri "s|ENV_AWS_SECRET_ACCESS_KEY|$AWS_SECRET_ACCESS_KEY|" ./docker/.env-build
+        - sed -ri "s|ENV_DYNAMODB_KEY|$DYNAMODB_KEY|" ./docker/.env-build
+        - sed -ri "s|ENV_DYNAMODB_SECRET|$DYNAMODB_SECRET|" ./docker/.env-build
         - sed -ri "s|ENV_AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/.env-build
         - sed -ri "s|ENV_AWS_SECRET|$AWS_SECRET|" ./docker/.env-build
+        
         - sed -ri "s|ENV_GA_ID|$GA_ID|" ./docker/.env-build
         - sed -ri "s|ENV_LOGGLY_KEY|$LOGGLY_KEY|" ./docker/.env-build
         - cat docker/.env-build
