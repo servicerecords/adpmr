@@ -9,5 +9,7 @@ RUN npm run prod
 RUN mkdir -p /app/public
 RUN mkdir -p /app/storage
 RUN mkdir -p /app/storage/logs
+RUN mkdir -p /var/www/.aws/
+COPY ./docker/aws_credentials-build /var/www/.aws/credential
 RUN chmod -R 777 /app/public
 RUN chmod -R 777 /app/storage
