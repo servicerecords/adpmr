@@ -9,11 +9,8 @@ env:
 jobs:
   include:
     - stage: Build Docker Image for branch
-      if: branch IN ("sandbox", "qa", "master")
+      if: branch IN ("sandbox", "qa", "master", "phase2")
       script:
-        - echo "$DOCKER_SECRET" | docker login -u "$DOCKER_USER" docker.io --password-stdin
-        - ls
-        - cat Dockerfile
         - chmod 755 ci/deploy_to_cf.sh
         - chmod 755 ci/zero_downtime.sh
         - cp docker/.env docker/.env-build
@@ -29,35 +26,51 @@ jobs:
         - sed -ri "s|ENV_GOV_PAY_API_KEY|$GOV_PAY_API_KEY|" ./docker/.env-build
         - sed -ri "s|ENV_GOV_PAY_RETURN_URL|$GOV_PAY_RETURN_URL|" ./docker/.env-build
         - sed -ri "s|ENV_NOTIFY_API_KEY|$NOTIFY_API_KEY|" ./docker/.env-build
+        
+        - sed -ri "s|ENV_AWS_ACCESS_KEY_ID|$AWS_ACCESS_KEY_ID|" ./docker/.env-build
+        - sed -ri "s|ENV_AWS_SECRET_ACCESS_KEY|$AWS_SECRET_ACCESS_KEY|" ./docker/.env-build
+        - sed -ri "s|ENV_DYNAMODB_KEY|$DYNAMODB_KEY|" ./docker/.env-build
+        - sed -ri "s|ENV_DYNAMODB_SECRET|$DYNAMODB_SECRET|" ./docker/.env-build
         - sed -ri "s|ENV_AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/.env-build
         - sed -ri "s|ENV_AWS_SECRET|$AWS_SECRET|" ./docker/.env-build
+        
         - sed -ri "s|ENV_GA_ID|$GA_ID|" ./docker/.env-build
         - sed -ri "s|ENV_LOGGLY_KEY|$LOGGLY_KEY|" ./docker/.env-build
         - cat docker/.env-build
         - cp docker/aws_credentials docker/aws_credentials-build
         - sed -ri "s|AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/aws_credentials-build
         - sed -ri "s|AWS_SECRET|$AWS_SECRET|" ./docker/aws_credentials-build
+        - pip install --user awscli
+        - export PATH=$PATH:$HOME/.local/bin
+        - aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$AWS_REPO_URL"
         - docker build -t build-image .
-        - docker tag build-image:latest "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
-        - docker push "$DOCKER_ORGANISATION"/srrdigital:"$DOCKER_TAG"
+        - docker tag build-image:latest "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
+
+        - docker push "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
 
       deploy:
         - provider: script
           skip_cleanup: true
+          manifest: manifest-phase2.yml
+          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=development CF_APP_NAME=phase2 CF_MANIFEST=ci/manifest-phase2.yml  ci/deploy_to_cf.sh
+          on:
+            branch: phase2
+        - provider: script
+          skip_cleanup: true
           manifest: manifest-sandbox.yml
-          script: env CF_SPACE=development CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-sandbox.yml ci/deploy_to_cf.sh
+          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=development CF_APP_NAME=active CF_MANIFEST=ci/manifest-sandbox.yml ci/deploy_to_cf.sh
           on:
             branch: sandbox
         - provider: script
           skip_cleanup: true
           manifest: manifest-qa.yml
-          script: env CF_SPACE=qa CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-qa.yml ci/deploy_to_cf.sh
+          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=qa CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-qa.yml ci/deploy_to_cf.sh
           on:
             branch: qa
         - provider: script
           skip_cleanup: true
           manifest: manifest-production.yml
-          script: env CF_SPACE=production CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-production.yml ci/deploy_to_cf.sh
+          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=production CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-production.yml ci/deploy_to_cf.sh
           on:
             branch: master
 
@@ -65,10 +78,10 @@ notifications:
   email:
     recipients:
       - toby@codesure.co.uk
-
+#      - lauren.phillips225@mod.gov.uk
 
 #    if: branch IN ("qa","master")
 #      recipients:
 #        - amanda.moran637@mod.gov.uk
-#        - lauren.phillips225@mod.gov.uk
+#
 #      on_success: always

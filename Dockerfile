@@ -1,4 +1,4 @@
-FROM codesure/srrdigital:baseline
+FROM 831999517078.dkr.ecr.eu-west-1.amazonaws.com/adpmr:baseline
 
 COPY ./docker/.env-build /app/.env
 COPY src/ /app
@@ -10,4 +10,7 @@ RUN mkdir -p /app/public
 RUN mkdir -p /app/storage
 RUN mkdir -p /app/storage/logs
 RUN chmod -R 777 /app/public
+RUN chmod -R 777 /app/storage
+RUN mkdir -p /var/www/.aws/
+COPY ./docker/aws_credentials-build /var/www/.aws/credentials
 RUN chmod -R 777 /app/storage

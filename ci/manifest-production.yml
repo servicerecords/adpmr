@@ -1,7 +1,7 @@
 applications:
   - name: active
     routes:
-      - route: adpmr-production.cloudapps.digital
+      - route: www.apply-deceased-military-record.service.gov.uk
     memory: 800M
     disk_quota: 2G
     instances: 1

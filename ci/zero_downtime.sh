@@ -12,24 +12,4 @@ if [ -z ${CF_APP_NAME+x} ]; then
   exit 1
 fi
 
-# DEPLOY APP WITH TEMPORARY NAME '_NEW':
-#   Note that traffic is load balanced between any existing app and the new app,
-#   by virtue of them having the same route mapped at this point, and CF's
-#   distribution over mappings of the same kind:
-# ./cf push ${CF_APP_NAME}_new -f ${CF_MANIFEST}
-./cf push -f ${CF_MANIFEST} --strategy rolling
-
-# CAN RUN SMOKE TEST AGAINST _NEW APP BEFORE PROCEEDING
-# (can map a new route to the _new app and reference this in smoke test configs)
-
-# CLEANUP EXISTING APP IF NECESSARY:
-#if ./cf app ${CF_APP_NAME} ; then
-#  ./cf stop ${CF_APP_NAME}
-#  ./cf delete ${CF_APP_NAME} -f
-#fi
-
-# RENAME NEWLY-DEPLOYED APP PROPERLY:
-#./cf rename ${CF_APP_NAME}_new ${CF_APP_NAME}
-
-# CHECK STATUS OF APP:
-#./cf apps | grep ${CF_APP_NAME}
+CF_DOCKER_PASSWORD=${AWS_SECRET_ACCESS_KEY} ./cf push -f ${CF_MANIFEST} --strategy rolling --docker-image ${AWS_CONTAINER_IMAGE} --docker-username ${AWS_ACCESS_KEY_ID}
