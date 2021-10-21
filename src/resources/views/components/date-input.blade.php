@@ -18,6 +18,5 @@
             id="{{ !$hideLabel ? $field . '-' . $period : $field }}"
             name="{{ $field }}-{{ $period }}" type="text" pattern="[0-9]*" inputmode="numeric"
             value="{{ old($field . '-' . $period, session($field. '-' . $period)) }}">
-
     </div>
 </div>
