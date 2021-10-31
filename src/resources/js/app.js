@@ -358,25 +358,28 @@ document.querySelectorAll('#govuk-cookie-banner .govuk-button-group button, a').
 });
 
 function formatTelephoneNumber(country, value) {
-    const phoneNumber = new AsYouType('GB')
+    const phoneNumber = new AsYouType(country || 'GB')
     phoneNumber.input(value)
 
-    const formattedNumber = new AsYouType('GB')
+    const formattedNumber = new AsYouType(country || 'GB')
     formattedNumber.input(phoneNumber.getNumber().number)
 
     return formattedNumber.formattedOutput
 }
 
-const telephoneInput = document.getElementById('applicant-telephone')
-const countryInput = document.getElementById('applicant-address-country')
+setTimeout((() => {
+    const telephoneInput = document.getElementById('applicant-telephone')
+    const countryInput = document.getElementById('applicant-address-country-select')
 
-if (telephoneInput && countryInput) {
-    telephoneInput.addEventListener('change', (element) => {
-        element.target.value = formatTelephoneNumber('GB', element.target.value)
+    countryInput.addEventListener('change', (event) => {
+        console.log('Select Changed', event.target, event.target.selectedOptions[0].dataset['iso'])
     })
 
-    telephoneInput.addEventListener('keyup', (element) => {
-        element.target.value = formatTelephoneNumber('GB', element.target.value)
-    })
-}
+    if (telephoneInput) {
+        telephoneInput.addEventListener('input', (element) => {
+            element.target.value = formatTelephoneNumber(countryInput.selectedOptions[0].dataset['iso'] || 'GB', element.target.value)
+        })
+    }
+}), 500)
+
 
