@@ -27,15 +27,15 @@ return [
     'connections' => [
         'aws' => [
             'credentials' => [
-//                'key' => env('DYNAMODB_KEY'),
-//                'secret' => env('DYNAMODB_SECRET'),
+                'key' => env('DYNAMODB_KEY'),
+                'secret' => env('DYNAMODB_SECRET'),
                 // If using as an assumed IAM role, you can also use the `token` parameter
-//                'token' => env('AWS_SESSION_TOKEN'),
+                // 'token' => env('AWS_SESSION_TOKEN'),
             ],
             'region' => env('DYNAMODB_REGION'),
             // if true, it will use Laravel Log.
             // For advanced options, see http://docs.aws.amazon.com/aws-sdk-php/v3/guide/guide/configuration.html
-            'debug' => env('DYNAMODB_DEBUG'),
+            'debug' => env('DYNAMODB_DEBUG', true),
         ],
         'aws_iam_role' => [
             'region' => env('DYNAMODB_REGION'),
