@@ -62,5 +62,5 @@ Route::get('dynamo', function() {
         $counter->save();
     }
     
-    return Command::SUCCESS;
+    return true;
 });
