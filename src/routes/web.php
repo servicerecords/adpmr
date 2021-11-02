@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Counter;
 use BaoPham\DynamoDb\DynamoDbModel;
 use Illuminate\Support\Facades\Route;
 
