@@ -53,4 +53,5 @@ class Dynamo extends Command
         
         return Command::SUCCESS;
     }
+    
 }

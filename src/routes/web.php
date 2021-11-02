@@ -1,5 +1,6 @@
 <?php
 
+use BaoPham\DynamoDb\DynamoDbModel;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/', function () {
@@ -45,3 +46,20 @@ Route::get('/feedback/complete', [\App\Http\Controllers\FeedbackController::clas
 
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 Route::view('/accessibility-statement', 'accessibility-statement')->name('accessibility-statement');
+
+Route::get('dynamo', function() {
+    $counter = new Counter();
+    $count = $counter->where('key', 'phase2-paid')->first();
+    
+    if($count) {
+        $count->update([
+            'count' => $count->count + 1
+        ]);
+    } else {
+        $counter->key = 'phase2-paid';
+        $counter->count = 1;
+        $counter->save();
+    }
+    
+    return Command::SUCCESS;
+});
