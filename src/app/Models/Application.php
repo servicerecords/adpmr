@@ -484,7 +484,6 @@ class Application
      *
      */
     public function countApplication( $type  = null) {
-        
         if(!in_array($type, [
             self::APPLICATION_PAID,
             self::APPLICATION_EXEMPT,
@@ -496,12 +495,7 @@ class Application
         $s3Bucket = Config::get('filesystems.disks.s3.bucket', false);
         $counterFile = 'counters/application-counter.json';
         $counterData = new \stdClass();
-        $counterData->$counterKey = (object)[
-            self::APPLICATION_PAID => 0,
-            self::APPLICATION_EXEMPT => 0,
-            self::APPLICATION_FAILED => 0
-        ];
-    
+        
         if (!Storage::disk('local')->exists($counterFile)) {
             if ($s3Bucket && Storage::disk('s3')->exists($counterFile)) {
                 $counterData = (object)json_decode(Storage::disk('s3')->get($counterFile));
@@ -518,7 +512,7 @@ class Application
             ];
         }
     
-        $counterData->$type++;
+        $counterData->$counterKey->$type++;
     
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         if ($s3Bucket) {
