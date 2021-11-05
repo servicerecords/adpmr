@@ -54,18 +54,31 @@ class Counter extends Command
         if (!Storage::disk('local')->exists($counterFile)) {
             if ($s3Bucket && Storage::disk('s3')->exists($counterFile)) {
                 $counterData = (object)json_decode(Storage::disk('s3')->get($counterFile));
-                if (!$counterData->$counterKey) {
-                    $counterData->$counterKey = (object)[
-                        'paid' => 0,
-                        'exempt' => 0,
-                        'failed' => 0
-                    ];
-                }
             }
         } else {
             $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
         }
-        
+    
+        if (!$counterData->$counterKey) {
+            $counterData->$counterKey = (object)[
+                'paid' => 0,
+                'exempt' => 0,
+                'failed' => 0
+            ];
+        }
+    
+        switch (rand(1, 3)) {
+            case 1:
+                $counterData->$counterKey->paid++;
+                break;
+            case 2:
+                $counterData->$counterKey->exempt++;
+                break;
+            case 3:
+                $counterData->$counterKey->failed++;
+                break;
+        }
+    
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         if ($s3Bucket) {
             Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
