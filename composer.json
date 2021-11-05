@@ -1,0 +1,5 @@
+{
+    "require": {
+        "baopham/dynamodb": "^6.1"
+    }
+}

@@ -1,5 +1,8 @@
 <?php
 
+$services = json_decode($_ENV['VCAP_SERVICES'] ?? '[]', true);
+$aws = $services['aws-s3-bucket'][0]['credentials'] ?? [];
+
 return [
 
     /*
@@ -55,14 +58,22 @@ return [
             'visibility' => 'public',
         ],
 
+//        's3' => [
+//            'driver' => 's3',
+//            'key' => env('AWS_ACCESS_KEY_ID'),
+//            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+//            'region' => env('AWS_DEFAULT_REGION'),
+//            'bucket' => env('AWS_BUCKET'),
+//            'url' => env('AWS_URL'),
+//            'endpoint' => env('AWS_ENDPOINT'),
+//        ],
+    
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-            'endpoint' => env('AWS_ENDPOINT'),
+            'key' => $aws['aws_access_key_id'] ?? '',
+            'secret' => $aws['aws_secret_access_key'] ?? '',
+            'region' => $aws['aws_region'] ?? '',
+            'bucket' => $aws['bucket_name'] ?? ''
         ],
 
     ],
