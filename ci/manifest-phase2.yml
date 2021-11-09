@@ -5,5 +5,7 @@ applications:
     memory: 800M
     disk_quota: 2G
     instances: 1
+    services:
+      - document-bucket
     docker:
       image: 831999517078.dkr.ecr.eu-west-1.amazonaws.com/adpmr:phase2

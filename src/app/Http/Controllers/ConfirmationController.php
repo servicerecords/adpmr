@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Payment;
-use BaoPham\DynamoDb\DynamoDbModel;
 use Illuminate\Http\Request;
 
 class ConfirmationController extends Controller
@@ -21,12 +20,15 @@ class ConfirmationController extends Controller
 
         if($payment !== true) {
             Application::getInstance()->cleanup();
+    
+            $application->countApplication(Application::APPLICATION_FAILED);
             return view('confirmation-error', [ 'payment' => $payment ]);
         }
     
-        $this->updateCounter('paid');
         if(session('application-reference', false)) {
-            session(['payment-status' => 'Paid']);
+    
+            $application->countApplication(Application::APPLICATION_PAID);
+            session(['payment-status' => Application::APPLICATION_PAID]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
@@ -45,14 +47,15 @@ class ConfirmationController extends Controller
     public function free() {
         $application = Application::getInstance();
     
-        $this->updateCounter('Exempt');
         if($application->isFree()) {
-            session(['payment-status' => 'Exempt']);
+            session(['payment-status' => Application::APPLICATION_EXEMPT]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 
+            $application->countApplication(Application::APPLICATION_EXEMPT);
             Application::getInstance()->cleanup();
+            
             return redirect()->route('confirmation.complete');
         } else {
             return redirect()->route('cancel-application');
@@ -64,25 +67,6 @@ class ConfirmationController extends Controller
      */
     public function complete() {
         return view('confirmation-success');
-    }
-    
-    /**
-     * Update counter for applications
-     * @param $paymentStatus
-     */
-    private function updateCounter( $paymentStatus ) {
-        $counter = new Counter();
-        $count = $counter->where('key', $paymentStatus)->first();
-    
-        if($count) {
-            $count->update([
-                'count' => $count->count + 1
-            ]);
-        } else {
-            $counter->key = $paymentStatus;
-            $counter->count = 1;
-            $counter->save();
-        }
     }
 
 }

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Carbon\Exceptions\InvalidPeriodParameterException;
 use DateTime;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -17,6 +18,10 @@ use Mockery\Exception;
 
 class Application
 {
+    const APPLICATION_PAID = 'paid';
+    const APPLICATION_EXEMPT = 'exempt';
+    const APPLICATION_FAILED = 'failed';
+    
     private static $instance = null;
     private $serviceperson = [];
     private $applicant = [];
@@ -473,5 +478,45 @@ class Application
 
         session()->flush();
         session(['application-reference' => $reference]);
+    }
+    
+    /**
+     *
+     */
+    public function countApplication( $type  = null) {
+        if(!in_array($type, [
+            self::APPLICATION_PAID,
+            self::APPLICATION_EXEMPT,
+            self::APPLICATION_FAILED
+        ])) return;
+        
+        $counterKey = Carbon::now()->startOfMonth()->toDateString() . '::' .
+            Carbon::now()->endOfMonth()->toDateString();
+        $s3Bucket = Config::get('filesystems.disks.s3.bucket', false);
+        $counterFile = 'counters/application-counter.json';
+        $counterData = new \stdClass();
+        
+        if (!Storage::disk('local')->exists($counterFile)) {
+            if ($s3Bucket && Storage::disk('s3')->exists($counterFile)) {
+                $counterData = (object)json_decode(Storage::disk('s3')->get($counterFile));
+            }
+        } else {
+            $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
+        }
+    
+        if (!$counterData->$counterKey) {
+            $counterData->$counterKey = (object)[
+                self::APPLICATION_PAID => 0,
+                self::APPLICATION_EXEMPT => 0,
+                self::APPLICATION_FAILED => 0
+            ];
+        }
+    
+        $counterData->$counterKey->$type++;
+    
+        Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
+        if ($s3Bucket) {
+            Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
+        }
     }
 }
