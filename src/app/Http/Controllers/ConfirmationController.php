@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Payment;
-use BaoPham\DynamoDb\DynamoDbModel;
 use Illuminate\Http\Request;
 
 class ConfirmationController extends Controller
@@ -26,11 +25,10 @@ class ConfirmationController extends Controller
             return view('confirmation-error', [ 'payment' => $payment ]);
         }
     
-        $this->updateCounter('paid');
         if(session('application-reference', false)) {
     
             $application->countApplication(Application::APPLICATION_PAID);
-            session(['payment-status' => 'Paid']);
+            session(['payment-status' => Application::APPLICATION_PAID]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
@@ -50,7 +48,7 @@ class ConfirmationController extends Controller
         $application = Application::getInstance();
     
         if($application->isFree()) {
-            session(['payment-status' => 'Exempt']);
+            session(['payment-status' => Application::APPLICATION_EXEMPT]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
