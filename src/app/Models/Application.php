@@ -504,7 +504,7 @@ class Application
             $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
         }
     
-        if (!$counterData->$counterKey) {
+        if (!isset($counterData->$counterKey)) {
             $counterData->$counterKey = (object)[
                 self::APPLICATION_PAID => 0,
                 self::APPLICATION_EXEMPT => 0,
@@ -515,6 +515,7 @@ class Application
         $counterData->$counterKey->$type++;
     
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
+        Storage::disk('local')->delete($counterFile);
         if ($s3Bucket) {
             Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         }
