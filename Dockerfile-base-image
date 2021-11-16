@@ -43,14 +43,14 @@ COPY ./docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ./docker/docker-entrypoint.sh /etc/entrypoint.sh
 
 # Add Chrome for smoke testing
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb
-RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
+# RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+# RUN dpkg -i google-chrome-stable_current_amd64.deb
+# RUN ln -s /usr/bin/google-chrome /usr/bin/chromium
 
-RUN rm google-chrome-stable_current_amd64.deb
+# RUN rm google-chrome-stable_current_amd64.deb
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 RUN chmod 755 /etc/entrypoint.sh
-COPY docker/chromedriver /usr/local/bin/chromedriver
+# COPY docker/chromedriver /usr/local/bin/chromedriver
 
 # Expose our HTTP port to the Host
 EXPOSE 80
