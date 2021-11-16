@@ -20,6 +20,9 @@ jobs:
         - sed -ri "s|ENV_LAND_EMAIL|$LAND_EMAIL|" ./docker/.env-build
         - sed -ri "s|ENV_SEA_EMAIL|$SEA_EMAIL|" ./docker/.env-build
         - sed -ri "s|ENV_AIR_EMAIL|$AIR_EMAIL|" ./docker/.env-build
+        - sed -ri "s|ENV_LAND_EMAIL_TEMPLATE|$LAND_EMAIL_TEMPLATE|" ./docker/.env-build
+        - sed -ri "s|ENV_SEA_EMAIL_TEMPLATE|$SEA_EMAIL_TEMPLATE|" ./docker/.env-build
+        - sed -ri "s|ENV_AIR_EMAIL_TEMPLATE|$AIR_EMAIL_TEMPLATE|" ./docker/.env-build
         - sed -ri "s|ENV_ACCOUNTS_EMAIL|$ACCOUNTS_EMAIL|" ./docker/.env-build
         - sed -ri "s|ENV_FEEDBACK_EMAIL|$FEEDBACK_EMAIL|" ./docker/.env-build
         - sed -ri "s|ENV_UNKNOWN_EMAIL|$UNKNOWN_EMAIL|" ./docker/.env-build
