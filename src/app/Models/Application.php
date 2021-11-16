@@ -110,7 +110,8 @@ class Application
             }
 
             if ($sessionKey === 'death-certificate') {
-                $this->deathCertificate = file_get_contents(storage_path($sessionValue));
+                $storage = Config::get('filesystems.disks.s3.bucket', false) ? 's3' : 'local';
+                $this->deathCertificate = Storage::disk($storage)->exists(storage_path($sessionValue));
             }
         }
 
