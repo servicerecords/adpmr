@@ -72,7 +72,7 @@ jobs:
           manifest: manifest-production.yml
           script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=production CF_APP_NAME=Blue CF_MANIFEST=ci/manifest-production.yml ci/deploy_to_cf.sh
           on:
-            branch: master
+            branch: masterer
 
 notifications:
   email:
