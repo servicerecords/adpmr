@@ -4,7 +4,7 @@
 @section('content')
     <p class="govuk-body">Try again later.</p>
     <p class="govuk-body">We have not saved your answers. You can restart your application from the
-        <a class="/" href="#">service homepage</a>.
+        <a class="" href="/">service homepage</a>.
     </p>
     <p class="govuk-body">You can make a paper based application here:
         <a href="https://www.gov.uk/get-copy-military-service-records">
