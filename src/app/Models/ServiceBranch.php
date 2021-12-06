@@ -51,7 +51,7 @@ class ServiceBranch
                         'serviceperson-discharged-information',
                     ]
                 ],
-                'EMAIL_TEMPLATE' => 'e06c9e67-53c6-442e-962c-770b760ffc78',
+                'EMAIL_TEMPLATE' => env('SEA_EMAIL_TEMPLATE', 'e06c9e67-53c6-442e-962c-770b760ffc78'),
                 'EMAIL_ADDRESS' => env('SEA_EMAIL', self::FALLBACK_EMAIL)
             ],
             self::ARMY => [
@@ -86,7 +86,7 @@ class ServiceBranch
                         'serviceperson-additional-information'
                     ]
                 ],
-                'EMAIL_TEMPLATE' => '68640434-bc34-4c0c-b8d4-de6d734661c6',
+                'EMAIL_TEMPLATE' => env('LAND_EMAIL_TEMPLATE', '68640434-bc34-4c0c-b8d4-de6d734661c6'),
                 'EMAIL_ADDRESS' => env('LAND_EMAIL', self::FALLBACK_EMAIL)
             ],
             self::RAF => [
@@ -116,7 +116,7 @@ class ServiceBranch
                         'serviceperson-discharged-information'
                     ]
                 ],
-                'EMAIL_TEMPLATE' =>'f8c75425-34bd-4322-8bb2-7081066175df',
+                'EMAIL_TEMPLATE' => env('AIR_EMAIL_TEMPLATE', 'f8c75425-34bd-4322-8bb2-7081066175df'),
                 'EMAIL_ADDRESS' => env('AIR_EMAIL', self::FALLBACK_EMAIL)
             ],
             self::HOME_GUARD => [
@@ -150,12 +150,14 @@ class ServiceBranch
                         'serviceperson-discharged-date-year',
                     ]
                 ],
-                'EMAIL_TEMPLATE' =>'101ce364-49e9-443c-8e4a-befc369fbcd5',
+                'EMAIL_TEMPLATE' => env('LAND_EMAIL_TEMPLATE', '101ce364-49e9-443c-8e4a-befc369fbcd5'),
                 'EMAIL_ADDRESS' => env('LAND_EMAIL', self::FALLBACK_EMAIL)
             ],
         ];
+        
+        unset($this->branches[self::ARMY], $this->branches[self::HOME_GUARD]);
     }
-
+    
     /**
      * @return ServiceBranch
      */
@@ -164,10 +166,10 @@ class ServiceBranch
         if (self::$instance === null) {
             self::$instance = new ServiceBranch;
         }
-
+        
         return self::$instance;
     }
-
+    
     /**
      * @param $branch
      * @return string
@@ -180,7 +182,7 @@ class ServiceBranch
             return 'Branch not found for: "' . $branch . '"';
         }
     }
-
+    
     /**
      * @param $branch
      * @return mixed|string
@@ -193,7 +195,7 @@ class ServiceBranch
             return 'Branch not found for: "' . $branch . '"';
         }
     }
-
+    
     /**
      * @param $branch
      * @return mixed|string
@@ -206,32 +208,34 @@ class ServiceBranch
             return self::FALLBACK_EMAIL;
         }
     }
-
+    
     /**
      * Get a branch code for creating an application reference
      * @param $branch
      * @return mixed|string
      */
-    public function getCode($branch) {
+    public function getCode($branch)
+    {
         if (isset($this->branches[$branch])) {
             return $this->branches[$branch]['CODE'] ?? '';
         } else {
             return 'Branch not found for: "' . $branch . '"';
         }
     }
-
+    
     /**
      * @param $branch
      * @return mixed|string
      */
-    public function getServiceBranch($branch) {
+    public function getServiceBranch($branch)
+    {
         if (isset($this->branches[$branch])) {
             return $this->branches[$branch]['SERVICE_BRANCH'] ?? '';
         } else {
             return 'Branch not found for: "' . $branch . '"';
         }
     }
-
+    
     /**
      * @return array|string[]
      */
@@ -241,10 +245,10 @@ class ServiceBranch
         foreach ($this->branches as $branchKey => $branchValue) {
             $branchList[$branchKey] = $branchValue['NAME'];
         }
-
+        
         return $branchList;
     }
-
+    
     /**
      * @return array|string[]
      */
@@ -258,10 +262,10 @@ class ServiceBranch
                 'children' => []
             ];
         }
-
+        
         return $optionsList;
     }
-
+    
     /**
      * @param $branch
      * @param $diedInService
@@ -272,7 +276,7 @@ class ServiceBranch
         if ($branch) {
             return $this->branches[$branch]['FIELDS'][($diedInService) ? 'DIS' : 'SIS'] ?? [];
         }
-
+        
         $fieldset = [];
         foreach ($this->branches as $branch) {
             foreach ($branch['FIELDS'] as $fields) {
@@ -281,7 +285,7 @@ class ServiceBranch
                 }
             }
         }
-
+        
         return array_unique($fieldset);
     }
 }

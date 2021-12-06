@@ -40,7 +40,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'dynamodb','loggly'],
             'ignore_exceptions' => false,
         ],
 
