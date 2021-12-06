@@ -21,9 +21,11 @@ class ConfirmationController extends Controller
         if($payment !== true) {
             return redirect()->route('check-answers');
         }
-
+    
         if(session('application-reference', false)) {
-            session(['payment-status' => 'Paid']);
+    
+            $application->countApplication(Application::APPLICATION_PAID);
+            session(['payment-status' => Application::APPLICATION_PAID]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
@@ -41,14 +43,16 @@ class ConfirmationController extends Controller
      */
     public function free() {
         $application = Application::getInstance();
-
+    
         if($application->isFree()) {
-            session(['payment-status' => 'Exempt']);
+            session(['payment-status' => Application::APPLICATION_EXEMPT]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 
+            $application->countApplication(Application::APPLICATION_EXEMPT);
             Application::getInstance()->cleanup();
+            
             return redirect()->route('confirmation.complete');
         } else {
             return redirect()->route('cancel-application');
