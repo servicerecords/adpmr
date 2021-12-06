@@ -24,6 +24,7 @@
         "kreait/laravel-firebase": "^3.0",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "sentry/sentry-laravel": "^2.10"
     },
     "require-dev": {
