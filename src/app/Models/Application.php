@@ -297,7 +297,7 @@ class Application
      */
     public function notifyBranch()
     {
-        $serviceEmail = explode(';', ServiceBranch::getInstance()->getEmailAddress(session('service')));
+        $serviceEmail = explode('--', ServiceBranch::getInstance()->getEmailAddress(session('service')));
         $serviceBranch = ServiceBranch::getInstance();
         $templateId = $serviceBranch->getEmailTemplateId(session('service'));
         $notify = $this->getClient();
