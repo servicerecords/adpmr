@@ -333,7 +333,7 @@ class Application
         
         foreach ($serviceEmail as $email) {
             $notify->sendEmail(
-                $email,
+                Str::replace('[@]', '@', $email),
                 $templateId,
                 $data,
                 session('applicant-reference')
