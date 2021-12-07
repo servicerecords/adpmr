@@ -86,7 +86,7 @@ notifications:
       - adam.lang132@mod.gov.uk
 #      - lauren.phillips225@mod.gov.uk
 
-#    if: branch IN ("qa","master")
+
 #      recipients:
 #        - amanda.moran637@mod.gov.uk
 #
