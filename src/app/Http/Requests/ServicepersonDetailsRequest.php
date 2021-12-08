@@ -77,6 +77,7 @@ class ServicepersonDetailsRequest extends DigitalRequest
             case ServiceBranch::NAVY:
             case ServiceBranch::RAF:
                 $messages = [
+                    'serviceperson-discharged-date-year.integer' => 'Enter a valid year',
                     'serviceperson-enlisted-date-year.integer' => 'Enter a valid year',
                     'serviceperson-enlisted-date-year.max' => 'Year joined service must be in the past',
                     'serviceperson-discharged-date-year.max' =>
