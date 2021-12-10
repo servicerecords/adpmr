@@ -45,3 +45,5 @@ Route::get('/feedback/complete', [\App\Http\Controllers\FeedbackController::clas
 
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 Route::view('/accessibility-statement', 'accessibility-statement')->name('accessibility-statement');
+
+Route::get('/counter-url', [\App\Http\Controllers\ServiceController::class, 'counterLink'])->name('counter-link');
