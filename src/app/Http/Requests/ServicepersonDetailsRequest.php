@@ -54,7 +54,11 @@ class ServicepersonDetailsRequest extends DigitalRequest
                             'Enter a valid month they died in service' :
                             'Enter a valid month they left service'
                     )],
-                    'serviceperson-discharged-date-year' => 'nullable|integer|max:' . date('Y'),
+                    'serviceperson-discharged-date-year' => [
+                        'nullable',
+                        'integer',
+                        'max:' . date('Y'),
+                    ]
                 ];
                 break;
         }
@@ -73,6 +77,8 @@ class ServicepersonDetailsRequest extends DigitalRequest
             case ServiceBranch::NAVY:
             case ServiceBranch::RAF:
                 $messages = [
+                    'serviceperson-discharged-date-year.integer' => 'Enter a valid year',
+                    'serviceperson-enlisted-date-year.integer' => 'Enter a valid year',
                     'serviceperson-enlisted-date-year.max' => 'Year joined service must be in the past',
                     'serviceperson-discharged-date-year.max' =>
                         session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
@@ -83,6 +89,7 @@ class ServicepersonDetailsRequest extends DigitalRequest
 
             case ServiceBranch::ARMY:
                 $messages = [
+                    'serviceperson-discharged-date-year.integer' => 'Enter a valid year',
                     'serviceperson-discharged-date-year.max' =>
                         session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
                             'Year of death must be in the past' :

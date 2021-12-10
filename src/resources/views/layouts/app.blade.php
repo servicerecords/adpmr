@@ -76,6 +76,7 @@
     gtag('config', '{{ env('GA_ID', 'UA-176740731-1') }}')
 </script>
 @stack('scripts')
+<script src="//rum-static.pingdom.net/pa-5f6b3962f07a4c001300036a.js" async></script>
 </body>
 
 </html>

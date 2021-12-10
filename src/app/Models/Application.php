@@ -4,24 +4,27 @@
 namespace App\Models;
 
 
+use Alphagov\Notifications\Client as Notify;
 use Alphagov\Notifications\Exception\ApiException;
 use Carbon\Carbon;
-use Carbon\Exceptions\InvalidPeriodParameterException;
 use DateTime;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use \Alphagov\Notifications\Client as Notify;
-use Mockery\Exception;
 
 class Application
 {
+    const APPLICATION_PAID = 'paid';
+    const APPLICATION_EXEMPT = 'exempt';
+    const APPLICATION_FAILED = 'failed';
+    
     private static $instance = null;
     private $serviceperson = [];
     private $applicant = [];
     private $deathCertificate = false;
-
+    
     private $standardQuestions = [
         ['label' => 'Service', 'field' => 'serviceperson-service', 'route' => 'service', 'change' => 'service branch'],
         ['label' => 'Service number', 'field' => 'serviceperson-service-number', 'route' => 'serviceperson-details', 'change' => 'service number'],
@@ -30,7 +33,7 @@ class Application
         ['label' => 'Place of birth', 'field' => 'serviceperson-place-of-birth', 'route' => 'essential-information', 'change' => 'place of birth'],
         ['label' => 'Date of birth', 'field' => 'serviceperson-date-of-birth-date', 'route' => 'essential-information', 'change' => 'date of birth'],
     ];
-
+    
     private $questionOrder = [
         Constant::SERVICEPERSION => [
             ServiceBranch::NAVY => [
@@ -86,7 +89,7 @@ class Application
             ['label' => 'Immediate Next of kin', 'field' => 'applicant-next-of-kin', 'route' => 'applicant-next-of-kin', 'change' => 'if you are their next of kin'],
         ]
     ];
-
+    
     /**
      * Application constructor.
      */
@@ -98,30 +101,31 @@ class Application
                 $this->serviceperson[$sessionKey] = $sessionValue;
                 continue;
             }
-
+            
             if (Str::startsWith($sessionKey, 'applicant-')) {
                 $this->applicant[$sessionKey] = $sessionValue;
                 continue;
             }
-
+            
             if ($sessionKey === 'death-certificate') {
-                $this->deathCertificate = file_get_contents(storage_path($sessionValue));
+                $storage = Config::get('filesystems.disks.s3.bucket', false) ? 's3' : 'local';
+                $this->deathCertificate = Storage::disk($storage)->exists(storage_path($sessionValue));
             }
         }
-
-        if(session('serviceperson-died-in-service', Constant::YES) === Constant::NO) {
-            switch(session('service', ServiceBranch::ARMY)) {
+        
+        if (session('serviceperson-died-in-service', Constant::YES) === Constant::NO) {
+            switch (session('service', ServiceBranch::ARMY)) {
                 case ServiceBranch::ARMY:
                     $this->questionOrder[Constant::SERVICEPERSION][ServiceBranch::ARMY][1] =
                         ['label' => 'Year of discharge', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
-
+                
                 case ServiceBranch::NAVY:
                 case ServiceBranch::RAF:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][2] =
                         ['label' => 'Date they left', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
                     break;
-
+                
                 case ServiceBranch::HOME_GUARD:
                     $this->questionOrder[Constant::SERVICEPERSION][session('service')][3] =
                         ['label' => 'Date they left', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
@@ -129,7 +133,7 @@ class Application
             }
         }
     }
-
+    
     /**
      * @return Application|null
      */
@@ -138,10 +142,10 @@ class Application
         if (self::$instance === null) {
             self::$instance = new Application();
         }
-
+        
         return self::$instance;
     }
-
+    
     /**
      * @return array
      */
@@ -151,43 +155,43 @@ class Application
             $this->standardQuestions,
             $this->questionOrder[Constant::SERVICEPERSION][session('service', ServiceBranch::ARMY)]
         );
-
+        
         foreach ($responses as $responseKey => $response) {
             if (Str::endsWith($response['field'], '-date')) {
                 $responses[$responseKey]['value'] = $this->generateDateString($response['field']);
             } else {
                 $responses[$responseKey]['value'] = session($response['field'], '');
             }
-
+            
             if (session('serviceperson-died-in-service', Constant::YES) == 'Yes') {
                 if (session('service') == ServiceBranch::HOME_GUARD) {
                     session(['label-serviceperson-discharged' => 'Date of death in service']);
                 } else {
-                    session(['label-serviceperson-discharged' => 'Date of death']);
+                    session(['label-serviceperson-discharged' => 'Service end date']);
                 }
             } else {
                 session(['label-serviceperson-discharged' => 'Date they left']);
             }
         }
-
+        
         return $responses;
     }
-
+    
     /**
      * @return array
      */
     public function getApplicant()
     {
         $responses = $this->questionOrder[Constant::APPLICANT];
-
+        
         foreach ($responses as $responseKey => $response) {
             if (session($response['field'], '') == trim('')) {
                 unset($responses[$responseKey]);
                 continue;
             }
-
+            
             $responses[$responseKey]['value'] = session($response['field'], '');
-
+            
             switch (session('service', ServiceBranch::HOME_GUARD)) {
                 case ServiceBranch::HOME_GUARD:
                     if ($response['label'] === 'Service number') {
@@ -195,18 +199,18 @@ class Application
                     }
                     break;
             }
-
+            
             if ($responses[$responseKey]['field'] === 'applicant-relationship') {
                 if (session('applicant-relationship', Constant::RELATION_OTHER) === Constant::RELATION_OTHER) {
                     $responses[$responseKey]['value'] = session('applicant-relationship-other', '');
                 }
             }
-
+            
         }
-
+        
         return $responses;
     }
-
+    
     /**
      * @return array
      */
@@ -214,7 +218,7 @@ class Application
     {
         return $this->questionOrder;
     }
-
+    
     /**
      * @return bool|string
      */
@@ -222,7 +226,7 @@ class Application
     {
         return $this->deathCertificate;
     }
-
+    
     /**
      * @return bool
      */
@@ -234,10 +238,10 @@ class Application
             case Constant::RELATION_PARENT:
                 return session('applicant-relationship-no-surviving-spouse', true);
         }
-
+        
         return false;
     }
-
+    
     /**
      * @return bool
      */
@@ -245,16 +249,16 @@ class Application
     {
         $diedInService = session('serviceperson-died-in-service', Constant::YES);
         $ageToDate = date('Y') - session('serviceperson-date-of-birth-date-year', date('Y'));
-
-        if($diedInService === Constant::YES)
+        
+        if ($diedInService === Constant::YES)
             return false;
-
-        if($ageToDate >= 116)
+        
+        if ($ageToDate >= 116)
             return false;
-
+        
         return true;
     }
-
+    
     /**
      * @param $section
      * @return int
@@ -263,7 +267,7 @@ class Application
     {
         return (session('section-complete', 0) & $section);
     }
-
+    
     /**
      * @param $section
      */
@@ -271,7 +275,7 @@ class Application
     {
         return (session('section-complete', 0) & ~$section);
     }
-
+    
     /**
      * @return void
      */
@@ -279,7 +283,7 @@ class Application
     {
         session(['section-complete' => 0]);
     }
-
+    
     /**
      * @param $section
      */
@@ -287,53 +291,56 @@ class Application
     {
         session(['section-complete' => session('section-complete', 0) | $section]);
     }
-
+    
     /**
      * Send notification to DBS Branch
      */
     public function notifyBranch()
     {
+        $serviceEmail = explode('--', ServiceBranch::getInstance()->getEmailAddress(session('service')));
         $serviceBranch = ServiceBranch::getInstance();
         $templateId = $serviceBranch->getEmailTemplateId(session('service'));
         $notify = $this->getClient();
         $template = $notify->getTemplate($templateId);
         $data = [];
-
+        
         if ($template) {
             $properties = $template['personalisation'];
 
-            if (session('serviceperson-died-in-service', Constant::NO) == Constant::NO
-                && session('death-certificate', false)) {
-                session(['attachment' => $notify->prepareUpload(
-                    file_get_contents(storage_path(session('death-certificate')))
-                )]);
-            }
-
+//            if (session('serviceperson-died-in-service', Constant::NO) == Constant::NO
+//                && session('death-certificate', false)) {
+//                session(['attachment' => $notify->prepareUpload(
+//                    file_get_contents(storage_path(session('death-certificate')))
+//                )]);
+//            }
+            
             foreach ($properties as $property => $propertyValue) {
                 if (session()->has($property)) {
                     $data[$property] = session($property, 'Field left blank');
                 } else {
                     $data[$property] = 'Field left blank';
-
+                    
                     if (Str::endsWith($property, '-date')) {
                         $data[$property] = $this->generateDateString($property);
-
-                        if(!$data[$property]) {
+                        
+                        if (!$data[$property]) {
                             $data[$property] = 'Field left blank';
                         }
                     }
                 }
             }
         }
-
-        $notify->sendEmail(
-            ServiceBranch::getInstance()->getEmailAddress(session('service')),
-            $templateId,
-            $data,
-            session('applicant-reference')
-        );
+        
+        foreach ($serviceEmail as $email) {
+            $notify->sendEmail(
+                Str::replace('[@]', '@', $email),
+                $templateId,
+                $data,
+                session('applicant-reference')
+            );
+        }
     }
-
+    
     /**
      * Send notification to applicant
      */
@@ -346,7 +353,7 @@ class Application
             'dbs_email' => ServiceBranch::getInstance()->getEmailAddress(session('service')) ?? '',
             'reference_number' => session('application-reference') ?? '',
         ];
-
+        
         try {
             return $this->getClient()->sendEmail(
                 session('applicant-email-address'),
@@ -359,16 +366,16 @@ class Application
                 'template' => $templateId,
                 'data' => $data,
             ];
-
+            
             $failureFile = storage_path('app/notify/failure.json');
             $failures = json_decode(file_get_contents($failureFile));
             array_push($failures, $failure);
             file_put_contents($failureFile, json_encode($failures));
-
+            
             return $e;
         }
     }
-
+    
     /**
      * Create a unique reference for each new request.
      */
@@ -376,12 +383,12 @@ class Application
     {
         $code = ServiceBranch::getInstance()->getCode(session('service', ServiceBranch::ARMY));
         $reference = $code . '-' . time();
-
+        
         session(['application-reference' => $reference]);
-
+        
         return $reference;
     }
-
+    
     /**
      * @param $field
      * @return string
@@ -389,7 +396,7 @@ class Application
     protected function generateDateString($field)
     {
         $day = $month = $year = '';
-
+        
         if ($field === 'serviceperson-date-of-birth-date') {
             $day = session('serviceperson-date-of-birth-date-day', Constant::DAY_ZERO_PLACEHOLDER);
             $month = session('serviceperson-date-of-birth-date-month', Constant::MONTH_ZERO_PLACEHOLDER);
@@ -399,32 +406,32 @@ class Application
                 session('service', ServiceBranch::ARMY),
                 session('servicepersion-died-in-service')
             );
-
+            
             if (array_key_exists($field . '-day', array_flip($fields))) {
-                $day = session($field   . '-day', Constant::DAY_ZERO_PLACEHOLDER);
+                $day = session($field . '-day', Constant::DAY_ZERO_PLACEHOLDER);
             }
-
+            
             if (array_key_exists($field . '-month', array_flip($fields))) {
                 $month = session($field . '-month', Constant::MONTH_ZERO_PLACEHOLDER);
             }
-
+            
             if (array_key_exists($field . '-year', array_flip($fields))) {
                 $year = session($field . '-year', Constant::YEAR_ZERO_PLACEHOLDER);
             }
         }
-
+        
         if (trim($day) == '') $day = Constant::DAY_ZERO_PLACEHOLDER;
         else $day = sprintf('%02d', $day);
-
+        
         if (trim($month) == '') $month = Constant::MONTH_ZERO_PLACEHOLDER;
         else $month = sprintf('%02d', $month);
-
+        
         if (trim($year) == '') $year = Constant::YEAR_ZERO_PLACEHOLDER;
         else $year = sprintf('%04d', $year);
-
+        
         return $this->formatDateResponse($year . '-' . $month . '-' . $day);
     }
-
+    
     /**
      * @param $response
      * @return string
@@ -432,23 +439,23 @@ class Application
     public function formatDateResponse($response)
     {
         list($year, $month, $day) = explode('-', $response);
-
+        
         $dateResponse = [];
         if ($year == '0000' || $month == '00' || $day == '00') {
             if ($day !== '00') array_push($dateResponse, $day);
-
+            
             array_push($dateResponse,
                 ($month !== '00') ? (DateTime::createFromFormat('!m', $month))->format('F')
                     : (($day !== '00') ? 'Unknown month' : false));
-
+            
             if ($year !== '0000') array_push($dateResponse, $year);
         } else {
             $dateResponse = explode('-', \Illuminate\Support\Carbon::createFromFormat('Y-m-d', $response)->format('d F Y'));
         }
-
+        
         return (sizeof($dateResponse) > 0) ? trim(join(' ', $dateResponse)) : 'Not answered';
     }
-
+    
     /**
      * @return Notify
      */
@@ -459,19 +466,61 @@ class Application
             'httpClient' => new Client()
         ]);
     }
-
+    
     /**
      * Clear up the session
      */
     public function cleanup()
     {
         $reference = session('application-reference');
-
+        
         if (session('death-certificate')) {
             Storage::delete(session('death-certificate'));
         }
-
+        
         session()->flush();
         session(['application-reference' => $reference]);
+    }
+    
+    /**
+     *
+     */
+    public function countApplication($type = null)
+    {
+        if (!in_array($type, [
+            self::APPLICATION_PAID,
+            self::APPLICATION_EXEMPT,
+            self::APPLICATION_FAILED
+        ])) return;
+        
+        $counterKey = Carbon::now()->startOfMonth()->toDateString() . '::' .
+            Carbon::now()->endOfMonth()->toDateString();
+        $s3Bucket = Config::get('filesystems.disks.s3.bucket', false);
+        $counterFile = 'counters/application-counter.json';
+        $counterData = new \stdClass();
+        
+        if (!Storage::disk('local')->exists($counterFile)) {
+            if ($s3Bucket && Storage::disk('s3')->exists($counterFile)) {
+                $counterData = (object)json_decode(Storage::disk('s3')->get($counterFile));
+            }
+        } else {
+            $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
+        }
+        
+        if (!isset($counterData->$counterKey)) {
+            $counterData->$counterKey = (object)[
+                self::APPLICATION_PAID => 0,
+                self::APPLICATION_EXEMPT => 0,
+                self::APPLICATION_FAILED => 0
+            ];
+        }
+        
+        $counterData->$counterKey->$type++;
+        
+        Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
+        Storage::disk('local')->delete($counterFile);
+        if ($s3Bucket) {
+            Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
+        }
     }
 }
