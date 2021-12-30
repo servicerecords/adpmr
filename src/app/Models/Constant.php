@@ -40,4 +40,6 @@ class Constant
 
     public const SERVICEPERSION = 'serviceperson';
     public const APPLICANT = 'applicant';
+
+    public const SAVE_BUTTON_LABEL = 'Save and continue';
 }

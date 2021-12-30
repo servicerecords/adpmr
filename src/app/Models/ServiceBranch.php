@@ -7,12 +7,12 @@ namespace App\Models;
 class ServiceBranch
 {
     private const FALLBACK_EMAIL = 'DBSCIO-ADPMRFeedback@mod.gov.uk';
-    public const NAVY = 'NAVY';
-    public const RAF = 'RAF';
-    public const ARMY = 'ARMY';
-    public const HOME_GUARD = 'HOME_GUARD';
-    private static $instance = null;
-    
+    public  const NAVY           = 'NAVY';
+    public  const RAF            = 'RAF';
+    public  const ARMY           = 'ARMY';
+    public  const HOME_GUARD     = 'HOME_GUARD';
+    private static $instance     = null;
+
     /**
      * @var array[]
      */

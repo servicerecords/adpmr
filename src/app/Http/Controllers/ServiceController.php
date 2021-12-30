@@ -6,6 +6,7 @@ use App\Http\Requests\ServiceSelectRequest;
 use App\Models\Application;
 use App\Models\Constant;
 use App\Models\ServiceBranch;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ServiceController extends Controller
@@ -15,8 +16,8 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        // session(['service' => ServiceBranch::RAF]);
-        // session(['serviceperson-service' => ServiceBranch::getInstance()->getName(ServiceBranch::RAF)]);
+//        session(['service' => ServiceBranch::RAF]);
+//        session(['serviceperson-service' => ServiceBranch::getInstance()->getName(ServiceBranch::RAF)]);
 
         // Application::getInstance()->markSectionComplete(Constant::SECTION_SERVICE);
 
@@ -54,5 +55,10 @@ class ServiceController extends Controller
         }
 
         return redirect()->route('death-in-service');
+    }
+
+    public function counterLink() {
+        $url = Storage::disk('s3')->url('counters/application-counter.json');
+        return $url;
     }
 }

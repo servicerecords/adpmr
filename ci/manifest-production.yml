@@ -1,7 +1,9 @@
 applications:
   - name: active
     routes:
-      - route: adpmr-production.cloudapps.digital
+      - route: www.apply-deceased-military-record.service.gov.uk
+    buildpacks:
+      - https://github.com/cloudfoundry/php-buildpack.git#v4.4.34
     memory: 800M
     disk_quota: 2G
     instances: 1

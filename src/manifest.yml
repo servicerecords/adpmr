@@ -2,10 +2,10 @@ applications:
   - name: phase2
     routes:
       - route: adpmr-phase2.cloudapps.digital
-    memory: 2G
+    memory: 512MB
     buildpacks:
       - https://github.com/cloudfoundry/php-buildpack.git#v4.4.34
-    disk_quota: 2G
+    disk_quota: 512MB
     instances: 1
     services:
       - document-bucket

@@ -50,7 +50,6 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <x-success-alert :backLink="$back_link ?? false"></x-success-alert>
-
                 <h1 class="govuk-heading-l">
                     @yield('pageTitle')
                 </h1>

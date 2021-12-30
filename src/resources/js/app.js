@@ -1,7 +1,7 @@
 // require('./bootstrap');
 // require('./analytics');
 
-import {AsYouType, parsePhoneNumber} from "libphonenumber-js";
+import {AsYouType} from "libphonenumber-js";
 
 (function (root) {
     'use strict'
@@ -371,9 +371,11 @@ setTimeout((() => {
     const telephoneInput = document.getElementById('applicant-telephone')
     const countryInput = document.getElementById('applicant-address-country-select')
 
-    countryInput.addEventListener('change', (event) => {
-        console.log('Select Changed', event.target, event.target.selectedOptions[0].dataset['iso'])
-    })
+    if (countryInput) {
+        countryInput.addEventListener('change', (event) => {
+            console.log('Select Changed', event.target, event.target.selectedOptions[0].dataset['iso'])
+        })
+    }
 
     if (telephoneInput) {
         telephoneInput.addEventListener('input', (element) => {

@@ -25,6 +25,8 @@ class Day implements Rule
      */
     public function __construct($month = null, $year = null, string $message = null)
     {
+        if(!is_numeric($month)) $year = null;
+        if(!is_numeric($year)) $year = null;
         if ($month < 1 || $month > 12) $month = null;
 
         $this->maxDays = cal_days_in_month(CAL_GREGORIAN, $month ?? 1, $year ?? 2000);

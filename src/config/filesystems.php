@@ -1,6 +1,6 @@
 <?php
 
-$services = json_decode($_SERVER['VCAP_SERVICES'] ?? [], true);
+$services = json_decode($_SERVER['VCAP_SERVICES'] ?? "{}", true);
 $aws = $services['aws-s3-bucket'][0]['credentials'] ?? [];
 
 return [

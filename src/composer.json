@@ -8,10 +8,11 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2",
+        "php": "^7.1 || ^8.0",
         "ext-calendar": "*",
         "ext-gd": "*",
-        "ext-imagick": "*",
+        "ext-fileinfo": "*",
+        "ext-zip": "*",
         "ext-json": "*",
         "alphagov/notifications-php-client": "^3.2",
         "aws/aws-sdk-php": "*",

@@ -19,10 +19,7 @@ class ConfirmationController extends Controller
         $application = Application::getInstance();
 
         if($payment !== true) {
-            Application::getInstance()->cleanup();
-    
-            $application->countApplication(Application::APPLICATION_FAILED);
-            return view('confirmation-error', [ 'payment' => $payment ]);
+            return redirect()->route('check-answers');
         }
     
         if(session('application-reference', false)) {

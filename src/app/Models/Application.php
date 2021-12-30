@@ -4,17 +4,15 @@
 namespace App\Models;
 
 
+use Alphagov\Notifications\Client as Notify;
 use Alphagov\Notifications\Exception\ApiException;
 use Carbon\Carbon;
-use Carbon\Exceptions\InvalidPeriodParameterException;
 use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use \Alphagov\Notifications\Client as Notify;
-use Mockery\Exception;
 
 class Application
 {
@@ -115,8 +113,8 @@ class Application
             }
         }
 
-        if(session('serviceperson-died-in-service', Constant::YES) === Constant::NO) {
-            switch(session('service', ServiceBranch::ARMY)) {
+        if (session('serviceperson-died-in-service', Constant::YES) === Constant::NO) {
+            switch (session('service', ServiceBranch::ARMY)) {
                 case ServiceBranch::ARMY:
                     $this->questionOrder[Constant::SERVICEPERSION][ServiceBranch::ARMY][1] =
                         ['label' => 'Year of discharge', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of discharge'];
@@ -252,10 +250,10 @@ class Application
         $diedInService = session('serviceperson-died-in-service', Constant::YES);
         $ageToDate = date('Y') - session('serviceperson-date-of-birth-date-year', date('Y'));
 
-        if($diedInService === Constant::YES)
+        if ($diedInService === Constant::YES)
             return false;
 
-        if($ageToDate >= 116)
+        if ($ageToDate >= 116)
             return false;
 
         return true;
@@ -299,6 +297,7 @@ class Application
      */
     public function notifyBranch()
     {
+        $serviceEmail = explode('--', ServiceBranch::getInstance()->getEmailAddress(session('service')));
         $serviceBranch = ServiceBranch::getInstance();
         $templateId = $serviceBranch->getEmailTemplateId(session('service'));
         $notify = $this->getClient();
@@ -324,7 +323,7 @@ class Application
                     if (Str::endsWith($property, '-date')) {
                         $data[$property] = $this->generateDateString($property);
 
-                        if(!$data[$property]) {
+                        if (!$data[$property]) {
                             $data[$property] = 'Field left blank';
                         }
                     }
@@ -332,12 +331,14 @@ class Application
             }
         }
 
-        $notify->sendEmail(
-            ServiceBranch::getInstance()->getEmailAddress(session('service')),
-            $templateId,
-            $data,
-            session('applicant-reference')
-        );
+        foreach ($serviceEmail as $email) {
+            $notify->sendEmail(
+                Str::replace('[@]', '@', $email),
+                $templateId,
+                $data,
+                session('applicant-reference')
+            );
+        }
     }
 
     /**
@@ -407,7 +408,7 @@ class Application
             );
 
             if (array_key_exists($field . '-day', array_flip($fields))) {
-                $day = session($field   . '-day', Constant::DAY_ZERO_PLACEHOLDER);
+                $day = session($field . '-day', Constant::DAY_ZERO_PLACEHOLDER);
             }
 
             if (array_key_exists($field . '-month', array_flip($fields))) {
@@ -484,8 +485,9 @@ class Application
     /**
      *
      */
-    public function countApplication( $type  = null) {
-        if(!in_array($type, [
+    public function countApplication($type = null)
+    {
+        if (!in_array($type, [
             self::APPLICATION_PAID,
             self::APPLICATION_EXEMPT,
             self::APPLICATION_FAILED
@@ -504,7 +506,7 @@ class Application
         } else {
             $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
         }
-    
+
         if (!isset($counterData->$counterKey)) {
             $counterData->$counterKey = (object)[
                 self::APPLICATION_PAID => 0,
@@ -512,9 +514,9 @@ class Application
                 self::APPLICATION_FAILED => 0
             ];
         }
-    
+
         $counterData->$counterKey->$type++;
-    
+
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         Storage::disk('local')->delete($counterFile);
         if ($s3Bucket) {
