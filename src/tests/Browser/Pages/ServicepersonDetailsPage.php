@@ -14,7 +14,7 @@ class ServicepersonDetailsPage extends Page
      */
     public function url()
     {
-        return '/';
+        return '/serviceperson-details';
     }
 
     /**
@@ -36,7 +36,9 @@ class ServicepersonDetailsPage extends Page
     public function elements()
     {
         return [
-            '@element' => '#selector',
+            '@service-number' => '#serviceperson-service-number',
+            '@service-number' => '#serviceperson-service-number',
+            '@service-number' => '#serviceperson-service-number',
         ];
     }
 }

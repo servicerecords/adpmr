@@ -14,7 +14,7 @@ class EssentialInformationPage extends Page
      */
     public function url()
     {
-        return '/';
+        return '/essential-information';
     }
 
     /**
@@ -36,7 +36,9 @@ class EssentialInformationPage extends Page
     public function elements()
     {
         return [
-            '@element' => '#selector',
+            '@first-name' => '#serviceperson-first-name',
+            '@last-name' => '#serviceperson-last-name',
+            '@place-of-birth' => '#serviceperson-place-of-birth',
         ];
     }
 }
