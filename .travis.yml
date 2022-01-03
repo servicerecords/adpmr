@@ -26,7 +26,7 @@ jobs:
     - stage: Build Docker Image for branch
       if: branch IN ("sandbox", "qa", "master", "phase2")
       script:
-        - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V: $value" echo "N: $name" done
+        - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V $value" echo "N $name" done
         - chmod 755 ci/deploy_to_cf.sh
 
 notifications:
