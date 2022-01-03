@@ -10,7 +10,7 @@ addons:
 
 install:
   - cd src
-  - cp.testing .env
+  - cp .testing .env
   - travis_retry composer install --no-interaction --prefer-dist
   - php artisan key:generate
   - php artisan dusk:chrome-driver
