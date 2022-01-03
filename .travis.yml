@@ -9,7 +9,7 @@ addons:
   chrome: stable
 
 install:
-  - cp .env_testing .env
+  - cp ./.env_testing ./.env
   - travis_retry composer install --no-interaction --prefer-dist
   - php artisan key:generate
   - php artisan dusk:chrome-driver
