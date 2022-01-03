@@ -9,8 +9,8 @@ addons:
   chrome: stable
 
 install:
-  - ls
-  - cp src/.testing src/.env
+  - cd src
+  - cp.testing .env
   - travis_retry composer install --no-interaction --prefer-dist
   - php artisan key:generate
   - php artisan dusk:chrome-driver
