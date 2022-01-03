@@ -25,7 +25,7 @@ before_script:
   - php artisan serve --no-reload &
 
 script:
-  - php artisan dusk
+
 
 jobs:
   include:
@@ -34,6 +34,7 @@ jobs:
       script:
         - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V $value" echo "N $name" done
         - chmod 755 ci/deploy_to_cf.sh
+        - php artisan dusk
 
 notifications:
   email:
