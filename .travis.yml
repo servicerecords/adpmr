@@ -34,6 +34,7 @@ jobs:
       script:
         - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V $value" echo "N $name" done
         - chmod 755 ci/deploy_to_cf.sh
+        - php ../env_writer.php
         - php artisan dusk
 
 notifications:
