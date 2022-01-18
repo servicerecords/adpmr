@@ -1,0 +1,6 @@
+{
+    "WEBDIR": "public",
+    "PHP_VERSION": "{PHP_74_LATEST}",
+    "PHP_MODULES": ["cgi","pear","zip"],
+    "COMPOSER_VENDOR_DIR": "vendor"
+}
