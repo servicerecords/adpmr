@@ -3,8 +3,8 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
 use Illuminate\Support\Str;
+use Illuminate\View\Component;
 
 abstract class FormField extends Component
 {
@@ -106,8 +106,8 @@ abstract class FormField extends Component
         $this->hideLabel = $hideLabel;
         $this->_id = Str::lower(Str::snake(str_replace(['/'], ' or ', str_replace(['(', ')'], '', $label))));
 
-        if($hint) {
-            if(Str::endsWith($hint, '.')) {
+        if ($hint) {
+            if (Str::endsWith($hint, '.')) {
                 $this->hint = $hint;
             } else {
                 $this->hint = $hint . '.';

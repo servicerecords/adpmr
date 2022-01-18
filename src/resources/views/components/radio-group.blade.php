@@ -1,5 +1,4 @@
 <div class="govuk-form-group @error($field) govuk-form-group--error @enderror">
-    <a id="{{ $field }}"></a>
     <fieldset class="govuk-fieldset">
         @if($label)
             @if(!$hideLegend)
@@ -15,7 +14,7 @@
             @if($hasConditionals) data-module="govuk-radios" @endif>
             @foreach($options as $option)
                 <x-radio-button :label="$option['label']" :value="$option['value'] ?? $option['label']"
-                                :field="$field"
+                                :field="$field" :fieldAsID="$loop->first"
                                 :children="$option['children']"></x-radio-button>
             @endforeach
         </div>

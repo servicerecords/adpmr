@@ -6,6 +6,7 @@
         <x-error-summary :errors="$errors"></x-error-summary>
         <x-radio-group label="Did they die in service?"
                        field="serviceperson-died-in-service"
+                       :questionTag="'h2'"
                        :options="$options"></x-radio-group>
         <x-submit-form></x-submit-form>
     </form>

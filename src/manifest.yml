@@ -1,7 +1,8 @@
 applications:
-  - name: phase2
+  - name: active
     routes:
-      - route: adpmr-phase2.cloudapps.digital
+      - route: adpmr-sandbox.cloudapps.digital
+#      - route: www.apply-deceased-military-record.service.gov.uk
     memory: 512MB
     buildpacks:
       - https://github.com/cloudfoundry/php-buildpack.git#v4.4.34

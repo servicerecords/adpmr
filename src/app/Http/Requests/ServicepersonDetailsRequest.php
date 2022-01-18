@@ -30,7 +30,6 @@ class ServicepersonDetailsRequest extends DigitalRequest
                 break;
 
             case ServiceBranch::NAVY:
-            case ServiceBranch::RAF:
                 $rules = [
                     'serviceperson-enlisted-date-day' => [
                         'nullable',
@@ -61,6 +60,39 @@ class ServicepersonDetailsRequest extends DigitalRequest
                     ]
                 ];
                 break;
+
+            case ServiceBranch::RAF:
+                $rules = [
+                    'serviceperson-enlisted-date-day' => [
+                        'nullable',
+                        new Day(
+                            request()->input('serviceperson-enlisted-date-month'),
+                            request()->input('serviceperson-enlisted-date-year'),
+                            'Enter a valid day they joined'
+                        )],
+                    'serviceperson-enlisted-date-month' => ['nullable',  new Month('Enter a valid month they joined')],
+                    'serviceperson-enlisted-date-year'  => 'nullable|integer|max:' . date('Y'),
+                    'serviceperson-discharged-date-day' => ['nullable',
+                        new Day(
+                            request()->input('serviceperson-enlisted-date-month'),
+                            request()->input('serviceperson-enlisted-date-year'),
+                            session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
+                                'Enter a valid day they died in service' :
+                                'Enter a valid day they left service'
+                        )],
+                    'serviceperson-discharged-date-month' => ['nullable', new Month(
+                        session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
+                            'Enter a valid month they died in service' :
+                            'Enter a valid month they left service'
+                    )],
+                    'serviceperson-discharged-date-year' => [
+                        'nullable',
+                        'integer',
+                        'max:' . date('Y'),
+                        'min:1920',
+                    ]
+                ];
+                break;
         }
 
         return $rules;
@@ -75,6 +107,17 @@ class ServicepersonDetailsRequest extends DigitalRequest
 
         switch (session('service', ServiceBranch::ARMY)) {
             case ServiceBranch::NAVY:
+                $messages = [
+                    'serviceperson-discharged-date-year.integer' => 'Enter a valid year',
+                    'serviceperson-enlisted-date-year.integer' => 'Enter a valid year',
+                    'serviceperson-enlisted-date-year.max' => 'Year joined service must be in the past',
+                    'serviceperson-discharged-date-year.max' =>
+                        session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
+                            'Year of death in service must be in the past' :
+                            'Year they must be in the past',
+                ];
+                break;
+
             case ServiceBranch::RAF:
                 $messages = [
                     'serviceperson-discharged-date-year.integer' => 'Enter a valid year',
@@ -84,6 +127,8 @@ class ServicepersonDetailsRequest extends DigitalRequest
                         session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
                             'Year of death in service must be in the past' :
                             'Year they must be in the past',
+
+                    'serviceperson-discharged-date-year.min' => 'Date of death is before 1 Jan 1920',
                 ];
                 break;
 

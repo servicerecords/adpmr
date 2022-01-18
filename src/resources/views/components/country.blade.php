@@ -5,8 +5,7 @@
     <x-error-message :field="$field"></x-error-message>
     <select class="govuk-select govuk-!-width-two-thirds @error($field) govuk-input--error @enderror" id="{{ $field }}"
             name="{{ $field }}"
-            aria-describedby="@if($hint){{ $field }}-hint @endif @error($field) {{ $field }}-error @enderror"
-            autocomplete="new-password">
+            aria-describedby="@if($hint){{ $field }}-hint @endif @error($field) {{ $field }}-error @enderror">
         <option></option>
         @foreach($countries as $country)
             <option value="{{ $country['country'] }}" data-iso="{{ $country['iso'] }}"

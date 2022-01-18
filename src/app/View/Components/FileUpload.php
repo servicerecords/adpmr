@@ -2,8 +2,6 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
-
 class FileUpload extends FormField
 {
     public $accept;

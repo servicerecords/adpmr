@@ -19,7 +19,7 @@ class Application
     const APPLICATION_PAID = 'paid';
     const APPLICATION_EXEMPT = 'exempt';
     const APPLICATION_FAILED = 'failed';
-    
+
     private static $instance = null;
     private $serviceperson = [];
     private $applicant = [];
@@ -84,8 +84,8 @@ class Application
             ['label' => 'Country', 'field' => 'applicant-address-country', 'route' => 'applicant-details', 'change' => 'your country'],
             ['label' => 'Telephone Number', 'field' => 'applicant-telephone', 'route' => 'applicant-details', 'change' => 'your telephone number'],
             ['label' => 'Relationship to serviceperson', 'field' => 'applicant-relationship', 'route' => 'applicant-relationship', 'change' => 'relationship to serviceperson'],
-            ['label' => 'Spouse at death', 'field' => 'applicant-relationship-spouse-at-death', 'route' => 'applicant-relationship', 'change' => 'if you were their spouse at death'],
-            ['label' => 'Parent confirmed no spouse', 'field' => 'applicant-relationship-no-surviving-spouse', 'route' => 'applicant-relationship', 'change' => 'if a parent confirmed no spouse'],
+            ['label' => 'You were the spouse on death', 'field' => 'applicant-relationship-spouse-at-death', 'route' => 'applicant-relationship', 'change' => 'if you were their spouse at death'],
+            ['label' => 'Parent at death (no spouse)', 'field' => 'applicant-relationship-no-surviving-spouse', 'route' => 'applicant-relationship', 'change' => 'if a parent confirmed no spouse'],
             ['label' => 'Immediate Next of kin', 'field' => 'applicant-next-of-kin', 'route' => 'applicant-next-of-kin', 'change' => 'if you are their next of kin'],
         ]
     ];
@@ -132,6 +132,15 @@ class Application
                     break;
             }
         }
+
+//        switch (session('applicant-relationship')) {
+//            case Constant::RELATION_PARENT:
+//                $this->question[Constant::APPLICANT][session('service')]
+//                break;
+//
+//            case Constant::RELATION_PARENT:
+//                break;
+//        }
     }
 
     /**
@@ -201,11 +210,18 @@ class Application
             }
 
             if ($responses[$responseKey]['field'] === 'applicant-relationship') {
-                if (session('applicant-relationship', Constant::RELATION_OTHER) === Constant::RELATION_OTHER) {
-                    $responses[$responseKey]['value'] = session('applicant-relationship-other', '');
+                switch (session('applicant-relationship', Constant::RELATION_OTHER)) {
+                    case Constant::RELATION_OTHER:
+                        $responses[$responseKey]['value'] = session('applicant-relationship-other', '');
+                        break;
+
+//                    case Constant::RELATION_PARENT:
+//                        if ($this->getResponse('applicant-relationship-no-surviving-spouse') === Constant::YES) {
+//                            $responses[$responseKey]['value'] = 'Parent at death (no spouse)';
+//                        }
+//                        break;
                 }
             }
-
         }
 
         return $responses;
@@ -306,13 +322,6 @@ class Application
 
         if ($template) {
             $properties = $template['personalisation'];
-
-//            if (session('serviceperson-died-in-service', Constant::NO) == Constant::NO
-//                && session('death-certificate', false)) {
-//                session(['attachment' => $notify->prepareUpload(
-//                    file_get_contents(storage_path(session('death-certificate')))
-//                )]);
-//            }
 
             foreach ($properties as $property => $propertyValue) {
                 if (session()->has($property)) {
@@ -481,7 +490,7 @@ class Application
         session()->flush();
         session(['application-reference' => $reference]);
     }
-    
+
     /**
      *
      */
@@ -492,13 +501,13 @@ class Application
             self::APPLICATION_EXEMPT,
             self::APPLICATION_FAILED
         ])) return;
-        
+
         $counterKey = Carbon::now()->startOfMonth()->toDateString() . '::' .
             Carbon::now()->endOfMonth()->toDateString();
         $s3Bucket = Config::get('filesystems.disks.s3.bucket', false);
         $counterFile = 'counters/application-counter.json';
         $counterData = new \stdClass();
-        
+
         if (!Storage::disk('local')->exists($counterFile)) {
             if ($s3Bucket && Storage::disk('s3')->exists($counterFile)) {
                 $counterData = (object)json_decode(Storage::disk('s3')->get($counterFile));
@@ -522,5 +531,21 @@ class Application
         if ($s3Bucket) {
             Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         }
+    }
+
+    /**
+     * @param $questions
+     * @param $field
+     * @return void
+     */
+    private function getResponse($field)
+    {
+        foreach (session()->all() as $key => $value) {
+            if ($key === $field) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 }

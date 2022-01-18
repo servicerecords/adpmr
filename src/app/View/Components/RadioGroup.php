@@ -2,8 +2,6 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
-
 class RadioGroup extends FormField
 {
     /**
@@ -24,7 +22,7 @@ class RadioGroup extends FormField
     public function __construct($field = null, $label = 'Option', $value = null, $hint = false, $selected = null,
                                 $options = [], $labelExtra = null, $mandatory = true, $characterLimit = false,
                                 $fullWidth = false, $autocomplete = false, $hideLabel = false, $hideLegend = false, $hasConditionals = false,
-    $questionTag='h1')
+                                $questionTag = 'h1')
     {
 
         parent::__construct($field, $label, $value, $hint, $selected, $options,

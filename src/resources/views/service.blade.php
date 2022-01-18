@@ -3,7 +3,7 @@
 
 @section('content')
     @php
-        $altLink = "https://www.gov.uk/get-copy-military-service-records/apply-for-someone-elses-records";
+        $altLink = "https://www.gov.uk/get-copy-military-service-records/apply-for-someone-elses-records#apply-by-post";
     @endphp
 
     <p class="govuk-body">

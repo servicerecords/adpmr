@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FeedbackRequest;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class FeedbackController extends Controller
 {
@@ -27,14 +27,22 @@ class FeedbackController extends Controller
         ]);
 
         try {
+            $serviceEmail = explode('--', env('FEEDBACK_EMAIL', 'DBSCIO-ADPMRFeedback@mod.gov.uk'));
+
             $params = [
                 'service' => $request->input('feedback-satisfaction'),
                 'feedback' => (null !== $request->input('feedback-improvement') ? $request->input('feedback-improvement') : 'No feedback given')
             ];
-            $notifyClient->sendEmail(
-                env('FEEDBACK_EMAIL', 'DBSCIO-ADPMRFeedback@mod.gov.uk'),
-                '0f3b68c3-4589-4466-a743-73f73e841187',
-                $params);
+
+            // @todo Make template ID for feedback come from an ENV var
+            foreach ($serviceEmail as $email) {
+                $notifyClient->sendEmail(
+                    Str::replace('[@]', '@', $email),
+                    env('FEEBBACK_TEMPLATE', '0f3b68c3-4589-4466-a743-73f73e841187'),
+                    $params
+                );
+            }
+
             return redirect()->route('feedback.complete');
         } catch (\Exception $e) {
             return $e;

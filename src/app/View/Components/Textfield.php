@@ -2,9 +2,6 @@
 
 namespace App\View\Components;
 
-use Illuminate\Support\Str;
-use Illuminate\View\Component;
-
 class Textfield extends FormField
 {
     /**
@@ -25,7 +22,7 @@ class Textfield extends FormField
     public function __construct($field = null, $label = 'Option', $value = null, $hint = false, $selected = null,
                                 $options = [], $labelExtra = null, $mandatory = true, $characterLimit = false,
                                 $fullWidth = false, $autocomplete = false, $hideLabel = false, $spellcheck = true,
-                                $maxlength = 120, $type= 'text')
+                                $maxlength = 120, $type = 'text')
     {
         parent::__construct($field, $label, $value, $hint, $selected, $options, $labelExtra, $mandatory, $characterLimit, $fullWidth, $autocomplete, $hideLabel);
 

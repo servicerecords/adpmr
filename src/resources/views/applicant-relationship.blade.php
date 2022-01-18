@@ -1,5 +1,4 @@
 @extends('layouts.app', ['title' => 'How are you related - '])
-
 @section('pageTitle', 'Your details')
 
 @section('content')

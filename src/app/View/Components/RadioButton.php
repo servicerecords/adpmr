@@ -2,11 +2,13 @@
 
 namespace App\View\Components;
 
-use Illuminate\Support\Str;
-use Illuminate\View\Component;
-
 class RadioButton extends FormField
 {
+    /**
+     * @var bool
+     */
+    public $fieldAsID = false;
+
     /**
      * @var array|mixed
      */
@@ -31,12 +33,13 @@ class RadioButton extends FormField
     public function __construct($field = null, $label = 'Option', $value = null, $hint = false,
                                 $selected = null, $options = [], $labelExtra = null, $mandatory = true,
                                 $characterLimit = false, $fullWidth = false, $autocomplete = false,
-                                $hideLabel = false, $children = [])
+                                $hideLabel = false, $children = [], $fieldAsID = false)
     {
         parent::__construct($field, $label, $value, $hint, $selected, $options, $labelExtra,
             $mandatory, $characterLimit, $fullWidth, $autocomplete, $hideLabel);
 
         $this->children = $children;
+        if($fieldAsID) $this->_id = $field;
     }
 
     /**

@@ -41,4 +41,5 @@ class ApplicantDetailsRequest extends DigitalRequest
             'applicant-details-transfer.required' => 'Select whether to use this information for billing',
         ];
     }
+
 }

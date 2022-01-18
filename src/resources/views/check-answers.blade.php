@@ -2,6 +2,12 @@
 @section('pageTitle', 'Check your answers before sending your application')
 
 @section('content')
+    @if(session()->has('payment_failed'))
+        <x-notification-banner label="Important">
+            Payment failed. You have not been charged. <a href="#form-submission-button">Enter card details</a>.
+        </x-notification-banner>
+    @endif
+
     <h2 class="govuk-heading-m">Serviceperson</h2>
     <x-summary-list :rows="$serviceperson"></x-summary-list>
 
