@@ -62,7 +62,7 @@ class EssentialInformationRequest extends DigitalRequest
                 new Month(),
                 'nullable'
             ],
-           'serviceperson-date-of-birth-date-year' => 'required|digits:4|integer|validate_dob|max:' . date('Y'),
+           'serviceperson-date-of-birth-date-year' => 'required|digits:4|integer|validate_dob|max:' . date('Y') - 1,
         ];
     }
 

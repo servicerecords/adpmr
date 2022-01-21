@@ -17,7 +17,7 @@
                      field="serviceperson-place-of-birth"
                      :mandatory="false"></x-textfield>
         <x-date-field label="Date of birth"
-                      hint="For example, 31 3 1910. A year of birth is required."
+                      hint="For example, 31 3 1910. A year of birth is required, the day and month are optional."
                       field="serviceperson-date-of-birth-date"></x-date-field>
         <x-submit-form></x-submit-form>
     </form>

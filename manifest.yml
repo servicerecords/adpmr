@@ -3,7 +3,7 @@ applications:
   - name: ${APP_NAME}
     routes:
       - route: ${APP_ROUTE}
-#      - route: adpmr-sandbox.cloudapps.digital
+#      - route: adpmr-qa.cloudapps.digital
 #      - route: www.apply-deceased-military-record.service.gov.uk
     memory: 512MB
     buildpacks:

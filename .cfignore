@@ -16,3 +16,4 @@ manifest.yml
 storage/logs/laravel.log
 debugbar
 framework/views/*.php
+cf.ini
