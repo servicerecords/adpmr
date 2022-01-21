@@ -9,7 +9,7 @@ notifications:
     recipients:
       - toby@codesure.co.uk
 
-before_script: composer require phpunit
+before_script: composer require phpunit/phpunit
 
 deploy:
   provider: cloudfoundry
