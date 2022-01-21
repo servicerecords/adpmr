@@ -53,5 +53,5 @@ deploy:
   space: ${CF_SPACE}
   on:
     repo: ${CF_REPO}
-    branch: ("docker-decomission")
+    branch: docker-decomission
   skip_cleanup: 'true'
