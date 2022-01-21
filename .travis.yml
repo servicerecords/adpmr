@@ -13,16 +13,16 @@ env:
 addons:
   chrome: stable
 
-install:
-  - cd src
-  - cp .testing .env
-  - travis_retry composer install --no-interaction --prefer-dist
-  - php artisan --no-interaction key:generate
-  - php artisan dusk:chrome-driver
+#install:
+#  - cd src
+#  - cp .testing .env
+#  - travis_retry composer install --no-interaction --prefer-dist
+#  - php artisan --no-interaction key:generate
+#  - php artisan dusk:chrome-driver
 
-before_script:
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-  - php artisan serve --no-reload &
+#before_script:
+#  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+#  - php artisan serve --no-reload &
 
 #script:
 
