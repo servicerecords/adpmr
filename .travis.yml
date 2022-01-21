@@ -24,18 +24,18 @@ before_script:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - php artisan serve --no-reload &
 
-script:
+#script:
 
 
-jobs:
-  include:
-    - stage: Build Docker Image for branch
-      if: branch IN ("sandbox", "qa", "master", "phase2")
-      script:
-        - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V $value" echo "N $name" done
-        - chmod 755 ci/deploy_to_cf.sh
-        - php ../env_writer.php
-        - php artisan dusk
+#jobs:
+#  include:
+#    - stage: Build Docker Image for branch
+#      if: branch IN ("sandbox", "qa", "master", "phase2", "")
+#      script:
+#        - env | while IFS= read -r line; do value=${line#*=} name=${line%%=*} echo "V $value" echo "N $name" done
+#        - chmod 755 ci/deploy_to_cf.sh
+#        - php ../env_writer.php
+#        - php artisan dusk
 
 notifications:
   email:
@@ -44,13 +44,14 @@ notifications:
 
 deploy:
   provider: cloudfoundry
-  api: https://api.cloud.service.gov.uk
-  username: toby@codesure.co.uk
+  deployment_strategy: rolling
+  api: ${CF_API}
+  username: ${CF_USERNAME}
   password:
     secure: Fuifj7RCGl6/SITU2Y0G9f9BTohemK9HYYKayI+pDvYF5ICioganOAP2zX8Anc0GPtEsikO+aaJb0dbqhvh+ndq2LqmrVl2pH4VdfDQGyxkq8xisTeWphR7lZ4H/cbITJ47RdJJBV/O0KWNhL8EOgPED1jMIlreWqXZxR4LLc1mHzvWbl82w7oEldk6ciKXiyMgrisPiX3OouAHrv1RKnDaorbU+rGwfB6WmhLF5qWbZz9dOhQ1XIeVkWmpIV0IDL8oAAvGE6OAYc4IPj+FSbnyBPBVs2qaTO0NB1MMk8PkmZWzQPPcyU/JUCg9Y0UkQF1+D05hxeH13HuuAA/tLMF3aAdA1klvZMjUCAAMjD1+nDYgZUyhEJ/zVABEB3WArUbfRC0WZtPeCSse7su27OXZ1L+vSQUWA/g6QvLii5tGVgdHlbzsj9KlQF9lvO9SJRmaopDwtT38NdIhNoNp2JxVqKZv4i7lW3/g1/6iE2ONLaSpDM/zUXD5ld7mQWBOahT8T5+QJh3wAtgRwvWr5aTswz1CF5r35Y/daoTcWWSN6PA+kD1uchb4hA+giC1dsREJBeDoADrC63m+ern2O1G1BSIgBNZYbyziNwf6sgzfBOnEYdP7CwTayTY2i2N523+uYHqJPFfdftfsEeNt/xsxiwGcKM9R2aPtF7mzDbcs=
-  organization: mod-request-a-historic-service-record
-  space: development
+  organization: ${CF_ORGANISATION}
+  space: ${CF_SPACE}
   on:
-    repo: servicerecords/adpmr
-    branch: phase2
+    repo: ${CF_REPO}
+    branch: ("docker-decomission")
   skip_cleanup: 'true'
