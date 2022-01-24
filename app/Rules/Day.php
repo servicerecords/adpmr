@@ -23,7 +23,7 @@ class Day implements Rule
      * @param null|string $year
      * @param null|string $message
      */
-    public function __construct($month = null, $year = null, string $message = null)
+    public function __construct($month = null, $year = null, string $message = null, $die = false)
     {
         if(!is_numeric($month)) $year = null;
         if(!is_numeric($year)) $year = null;
@@ -31,6 +31,10 @@ class Day implements Rule
 
         $this->maxDays = cal_days_in_month(CAL_GREGORIAN, $month ?? 1, $year ?? 2000);
         $this->message = $message;
+
+        if($die) {
+            dd($month, $year);
+        }
     }
 
     /**

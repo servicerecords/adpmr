@@ -20,8 +20,6 @@ class ServicepersonDetailsRequest extends DigitalRequest
     {
         $rules = [];
 
-        // dd(session()->all());
-
         switch (session('service', ServiceBranch::ARMY)) {
             case ServiceBranch::ARMY:
                 $rules = [
@@ -42,8 +40,8 @@ class ServicepersonDetailsRequest extends DigitalRequest
                     'serviceperson-enlisted-date-year'  => 'nullable|integer|max:' . date('Y'),
                     'serviceperson-discharged-date-day' => ['nullable',
                         new Day(
-                            request()->input('serviceperson-enlisted-date-month'),
-                            request()->input('serviceperson-enlisted-date-year'),
+                            request()->input('serviceperson-discharged-date-month'),
+                            request()->input('serviceperson-discharged-date-year'),
                             session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
                                 'Enter a valid day they died in service' :
                                 'Enter a valid day they left service'
@@ -74,8 +72,8 @@ class ServicepersonDetailsRequest extends DigitalRequest
                     'serviceperson-enlisted-date-year'  => 'nullable|integer|max:' . date('Y'),
                     'serviceperson-discharged-date-day' => ['nullable',
                         new Day(
-                            request()->input('serviceperson-enlisted-date-month'),
-                            request()->input('serviceperson-enlisted-date-year'),
+                            request()->input('serviceperson-discharged-date-month'),
+                            request()->input('serviceperson-discharged-date-year'),
                             session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
                                 'Enter a valid day they died in service' :
                                 'Enter a valid day they left service'

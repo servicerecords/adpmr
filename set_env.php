@@ -17,7 +17,7 @@ if (file_exists('./cf.ini')) {
         }
     }
 
-    `cf restage {$app}`;
+    // `cf restage {$app}`;
 }
 
 function setCFEnv($app, $key, $value)
