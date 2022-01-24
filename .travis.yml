@@ -13,6 +13,7 @@ before_script: composer require phpunit/phpunit
 
 deploy:
   provider: cloudfoundry
+  edge: true
   deployment_strategy: rolling
   api: ${CF_API}
   username: ${CF_USERNAME}
