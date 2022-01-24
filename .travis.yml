@@ -22,5 +22,6 @@ deploy:
   space: ${CF_SPACE}
   on:
     repo: ${CF_REPO}
-    branch: IN ("sandbox", "qa", "master")
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(sandbox|qa|master)$
   skip_cleanup: 'true'
