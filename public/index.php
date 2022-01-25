@@ -21,7 +21,7 @@ if (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
 }
 
 if(is_dir('/home/vcap')) {
-    symlink('/app/.aws', '~/.aws');
+    `ln -s /app/.aws /home/vcap/.aws`;
 }
 
 
