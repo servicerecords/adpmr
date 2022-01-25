@@ -1,15 +1,10 @@
 language:
-  php
-
-php:
-  - '8.0'
+  ruby
 
 notifications:
   email:
     recipients:
       - toby@codesure.co.uk
-
-before_script: composer require phpunit/phpunit
 
 deploy:
   provider: cloudfoundry
