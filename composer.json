@@ -75,7 +75,8 @@
             "whoami",
             "pwd",
             "[ -d \"/home/vcap/\" ] && ln -s /app/.aws ~/.aws",
-            "[ -d \"/home/vcap/\" ] && echo \"Hello World\""
+            "[ -d \"/home/vcap/\" ] && echo \"Hello World\"",
+            "ls -al /app"
         ]
     }
 }
