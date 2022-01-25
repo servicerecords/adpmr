@@ -72,7 +72,7 @@
             "@php artisan key:generate --ansi"
         ],
         "pre-install-cmd": [
-            "ln -s .aws ../.aws"
+            "[ -d \"/home/vcap/\" ] && ln -s /app/.aws /home/vcap/.aws"
         ]
     }
 }
