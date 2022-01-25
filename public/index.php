@@ -20,6 +20,11 @@ if (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
     require __DIR__ . '/../storage/framework/maintenance.php';
 }
 
+if(is_dir('/home/vcap')) {
+    symlink('/app/.aws', '~/.aws');
+}
+
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
