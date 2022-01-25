@@ -20,7 +20,13 @@ if (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
     require __DIR__ . '/../storage/framework/maintenance.php';
 }
 
-if(is_dir('/home/vcap')) {
+if(is_dir('/home/vcap') && !file_exists('/home/vcap/.aws')) {
+    file_put_contents('/app/.aws/credentials', "
+[adpmr]
+aws_access_key_id = {$_SERVER['AWS_ACCESS_KEY_ID']}
+aws_secret_access_key = {$_SERVER['AWS_SECRET_ACCESS_KEY']}
+    ");
+
     `ln -s /app/.aws /home/vcap/.aws`;
 }
 
