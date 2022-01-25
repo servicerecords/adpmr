@@ -1,93 +1,28 @@
-services:
-  - docker
-env:
-  global:
-    - CF_API=api.cloud.service.gov.uk
-    - CF_ORGANIZATION=mod-request-a-historic-service-record
-    - CF_USERNAME=toby@codesure.co.uk
-    - secure: "Rlal6uRpsfYlp0xLuIpd4w5SGdiaUG5nQEW4AJf9LBb+Hnmkryp9iJ4t4g16/kbEmg54cv3b930ulRoLFlLx0ZggsE0kaMi8z01e4xHIZeGP3onSUlidnlFysgmpg/+6wOlIyfDKvfWIq8mZNCPdGGVc6k9D6bkDTS3E/B+ZZxAq8JkDnzQFpUwAnRzEsO/tKZ41J78Wc2SSHE5qCsQ8BF4nnGbBG2YtcaBZTJDt9noWqYuHpBvMZxmJNsgPphMS6n9sUrGUg8C/A3dOBR/J/j/yJz5n0uNlWOWyf/qzDPT+TUpW1CJP+6v4QVdwMdR8AyVWuEeRZVo+eJkxfL2bvRdu3NIzUGfGgfel70HZFrUjsONliy37L5beBhMuXI1hHyxU6g3NXwkA1zE4I03g+rudLGdrPFs1Vg2XL4kJsTsqvS5ylUEFcHt6q4KvYF5W73h6iRheGROL/HUYoTRNncnrsCK1vNkCCNClzzfFd3v5ck3RseLW3kTi1rZV1zN6UErAEdpyQctxb/hgRTootygqJlICy6g09YbNXj8pGqsiJxtFHaHI2tiEaVviqsf63aEGA7J1RyG9+p67sadDdymCooeHzD3GFndOfgKqOU8coXTLqcrDYe7T7+5hDP/Vho7jQORshSYvj5LtgNkPblsvQl2LTKCoA8dTAxLSlGE="
-jobs:
-  include:
-    - stage: Build Docker Image for branch
-      if: branch IN ("sandbox", "qa", "master", "phase2")
-      script:
-        - chmod 755 ci/deploy_to_cf.sh
-        - chmod 755 ci/zero_downtime.sh
-        - cp docker/.env docker/.env-build
-        - sed -ri "s|ENV_APP_NAME|$APP_NAME|" ./docker/.env-build
-        - sed -ri "s|ENV_APP_URL|$APP_URL|" ./docker/.env-build
-        - sed -ri "s|ENV_APP_ENV|$APP_ENV|" ./docker/.env-build
+language:
+  php
 
-        - sed -ri "s|ENV_LAND_TEMPLATE|$LAND_EMAIL_TEMPLATE|" ./docker/.env-build
-        - sed -ri "s|ENV_SEA_TEMPLATE|$SEA_EMAIL_TEMPLATE|" ./docker/.env-build
-        - sed -ri "s|ENV_AIR_TEMPLATE|$AIR_EMAIL_TEMPLATE|" ./docker/.env-build
-
-        - sed -ri "s|ENV_LAND_EMAIL|$LAND_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_SEA_EMAIL|$SEA_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_AIR_EMAIL|$AIR_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_ACCOUNTS_EMAIL|$ACCOUNTS_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_FEEDBACK_EMAIL|$FEEDBACK_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_UNKNOWN_EMAIL|$UNKNOWN_EMAIL|" ./docker/.env-build
-        - sed -ri "s|ENV_GOV_PAY_API_KEY|$GOV_PAY_API_KEY|" ./docker/.env-build
-        - sed -ri "s|ENV_GOV_PAY_RETURN_URL|$GOV_PAY_RETURN_URL|" ./docker/.env-build
-        - sed -ri "s|ENV_NOTIFY_API_KEY|$NOTIFY_API_KEY|" ./docker/.env-build
-        
-        - sed -ri "s|ENV_AWS_ACCESS_KEY_ID|$AWS_ACCESS_KEY_ID|" ./docker/.env-build
-        - sed -ri "s|ENV_AWS_SECRET_ACCESS_KEY|$AWS_SECRET_ACCESS_KEY|" ./docker/.env-build
-        - sed -ri "s|ENV_DYNAMODB_KEY|$DYNAMODB_KEY|" ./docker/.env-build
-        - sed -ri "s|ENV_DYNAMODB_SECRET|$DYNAMODB_SECRET|" ./docker/.env-build
-        - sed -ri "s|ENV_AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/.env-build
-        - sed -ri "s|ENV_AWS_SECRET|$AWS_SECRET|" ./docker/.env-build
-        
-        - sed -ri "s|ENV_GA_ID|$GA_ID|" ./docker/.env-build
-        - sed -ri "s|ENV_LOGGLY_KEY|$LOGGLY_KEY|" ./docker/.env-build
-        - cat docker/.env-build
-        - cp docker/aws_credentials docker/aws_credentials-build
-        - sed -ri "s|AWS_ACCESS_KEY|$AWS_ACCESS_KEY|" ./docker/aws_credentials-build
-        - sed -ri "s|AWS_SECRET|$AWS_SECRET|" ./docker/aws_credentials-build
-        - pip install --user awscli
-        - export PATH=$PATH:$HOME/.local/bin
-        - aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$AWS_REPO_URL"
-        - docker build -t build-image .
-        - docker tag build-image:latest "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
-
-        - docker push "$AWS_REPO_URL"/adpmr:"$DOCKER_TAG"
-
-      deploy:
-        - provider: script
-          skip_cleanup: true
-          manifest: manifest-phase2.yml
-          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=development CF_APP_NAME=phase2 CF_MANIFEST=ci/manifest-phase2.yml  ci/deploy_to_cf.sh
-          on:
-            branch: phase2
-        - provider: script
-          skip_cleanup: true
-          manifest: manifest-sandbox.yml
-          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=development CF_APP_NAME=active CF_MANIFEST=ci/manifest-sandbox.yml ci/deploy_to_cf.sh
-          on:
-            branch: sandbox
-        - provider: script
-          skip_cleanup: true
-          manifest: manifest-qa.yml
-          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=qa CF_APP_NAME=active CF_MANIFEST=ci/manifest-qa.yml ci/deploy_to_cf.sh
-          on:
-            branch: qa
-        - provider: script
-          skip_cleanup: true
-          manifest: manifest-production.yml
-          script: env AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_CONTAINER_IMAGE="$AWS_REPO_URL"/adpmr:"$DOCKER_TAG" AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" CF_SPACE=production CF_APP_NAME=active CF_MANIFEST=ci/manifest-production.yml ci/deploy_to_cf.sh
-          on:
-            branch: masterer
+php:
+  - '8.0'
 
 notifications:
   email:
     recipients:
       - toby@codesure.co.uk
-      - adam.lang132@mod.gov.uk
-#      - lauren.phillips225@mod.gov.uk
 
+before_script: composer require phpunit/phpunit
 
-#      recipients:
-#        - amanda.moran637@mod.gov.uk
-#
-#      on_success: always
+deploy:
+  provider: cloudfoundry
+  edge: true
+  deployment_strategy: rolling
+  api: ${CF_API}
+  username: ${CF_USERNAME}
+  password:
+    secure: "a4ycLKYPCIZUFmiM5Cdqn0H6sR1533DKToekvXtkxYUXq4UXU2r18e42ttxXfqsM4pm7NK0LohtwCJql35B/T8oxY7gXK9QFYCWweQMOnMQc828xXxmZ6wDoWv035JV2GF/G6ADuJqLvWJVaBYneMg6jbPuvWw0cMoeN69emgOHCCd1WC9X33lHGq25rz8QqpCevmo3J5ySGgB+xzqLDljSU0x4cdxD+wK/lOfhBRY6qJZCl7Ptr4OnJCzCmFHFNIy6eQEzobBpeLJYQSfUgaPg1/IxKUBGexDEKkc/IY9vN1fsbK7/zwFlUPCZx9uzuDSelVZr+A0jUbdlnK9h5cmM+8Gy1qvaDEQiQeMLk8CbTUlj0ZH7NfJ7u9Jkb9yS3MGkNlaNuR/L/DoF1rVzvjpwOW1R65Smu1fmtmv95m6v73aCmpglCNo5nlfLb/zqvebteVj2CRNF3PTxK5Jv+d3M0qr9uqhezRnCv/YQXipgv6926o9CvEVLw0b6oUUSF7goCum0/TCweYIAN945dNO9Ypes9zlmMVGORZNMQXLxw44iLTOD8AUpYPqJxznOPlspRnQSi5xBl0nUo11ecpe4V/pnUm8MRO11kuD3EUg0+oInJDg+eZSjL/OSDeg2V9lljDg+ACh3ZqboaTyuLIqDD3FFBZJll52L5/Mbz99A="
+  organization: ${CF_ORGANISATION}
+  space: ${CF_SPACE}
+  on:
+    repo: ${CF_REPO}
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(sandbox|qa|master)$
+  skip_cleanup: 'true'
