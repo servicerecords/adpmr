@@ -70,6 +70,16 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "pre-install-cmd": [
+            "whoami",
+            "pwd",
+            "[ -d \"/home/vcap/\" ] && ln -s /app/.aws ~/.aws",
+            "[ -d \"/home/vcap/\" ] && echo \"Hello World\"",
+            "ls -al /app"
+        ],
+        "post-install-cmd": [
+            "ls -al /app"
         ]
     }
 }
