@@ -74,12 +74,8 @@
         "pre-install-cmd": [
             "whoami",
             "pwd",
-            "[ -d \"/home/vcap/\" ] && ln -s /app/.aws ~/.aws"
-        ],
-        "post-install-cmd": [
-            "whoami",
-            "pwd",
-            "[ -d \"/home/vcap/\" ] && ln -s /app/.aws ~/.aws"
+            "[ -d \"/home/vcap/\" ] && ln -s /app/.aws ~/.aws",
+            "[ -d \"/home/vcap/\" ] && echo \"Hello World\""
         ]
     }
 }
