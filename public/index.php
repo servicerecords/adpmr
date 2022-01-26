@@ -20,9 +20,16 @@ if (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
     require __DIR__ . '/../storage/framework/maintenance.php';
 }
 
+/**
+|--------------------------------------------------------------------------
+| If this is instance has a vcap directory, application should assume
+| this is a CloudFoundry instance. An AWS credentials file is required
+| with appropriate ID and Secret gleaned from the environment vars
+|--------------------------------------------------------------------------
+ */
 if(is_dir('/home/vcap') && !file_exists('/home/vcap/.aws')) {
     file_put_contents('/app/.aws/credentials', "
-[adpmr]
+[{$_SERVER['AWS_IAM_USER']}]
 aws_access_key_id = {$_SERVER['AWS_ACCESS_KEY_ID']}
 aws_secret_access_key = {$_SERVER['AWS_SECRET_ACCESS_KEY']}
     ");
