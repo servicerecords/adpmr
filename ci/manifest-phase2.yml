@@ -1,11 +1,11 @@
 applications:
-  - name: active
+  - name: phase2
     routes:
-      - route: adpmr-qa.cloudapps.digital
+      - route: adpmr-phase2.cloudapps.digital
+    memory: 2G
     buildpacks:
       - https://github.com/cloudfoundry/php-buildpack.git#v4.4.34
-    memory: 800M
     disk_quota: 2G
     instances: 1
-    docker:
-      image: codesure/srrdigital:qa
+    services:
+      - document-bucket

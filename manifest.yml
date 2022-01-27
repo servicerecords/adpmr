@@ -1,0 +1,12 @@
+applications:
+  - name: active
+#  - name: ${APP_NAME}
+#    routes:
+#      - route: www.apply-deceased-military-record.service.gov.uk
+    memory: 512MB
+    buildpacks:
+      - https://github.com/cloudfoundry/php-buildpack.git#v4.4.34
+    disk_quota: 512MB
+    instances: 1
+    services:
+      - document-bucket
