@@ -8,7 +8,7 @@
 
     <p class="govuk-body">
         This application process will not tell you if a service record is held.
-        (<a class="govuk-link" href="{{ $altLink }}">Apply by post for Army & Home Guard records</a>)
+        (<a class="govuk-link" href="{{ $altLink }}" style="white-space: nowrap;">Apply by post for Army & Home Guard records</a>)
     </p>
 
     <form method="post" action="{{ route('service.save') }}" novalidate>
