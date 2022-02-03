@@ -12,8 +12,7 @@
     </p>
 
     <form method="post" action="{{ route('service.save') }}" novalidate>
-        <x-error-summary :errors="$errors"></x-error-summary>
-        <x-radio-group label="Which service did they last serve in?"
+         <x-radio-group label="Which service did they last serve in?"
                        field="service"
                        :questionTag="'h2'"
                        :selected="session('service', null)"

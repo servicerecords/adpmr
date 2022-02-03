@@ -3,7 +3,6 @@
 
 @section('content')
     <form method="post" action="{{ route('essential-information.save') }}" novalidate>
-        <x-error-summary :errors="$errors"></x-error-summary>
         <x-textfield label="First name(s)"
                      hint="Include all middle names"
                      field="serviceperson-first-name"
