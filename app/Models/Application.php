@@ -494,7 +494,7 @@ class Application
     /**
      *
      */
-    public function countApplication($type = null)
+    public function countApplication($type = null, $branch = ServiceBranch::RAF)
     {
         if (!in_array($type, [
             self::APPLICATION_PAID,
@@ -516,18 +516,33 @@ class Application
             $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
         }
 
+        $placeholderData = (object)[
+            self::APPLICATION_PAID => 0,
+            self::APPLICATION_EXEMPT => 0,
+            self::APPLICATION_FAILED => 0
+        ];
+
         if (!isset($counterData->$counterKey)) {
-            $counterData->$counterKey = (object)[
+            $placeholderData = (object)[
                 self::APPLICATION_PAID => 0,
                 self::APPLICATION_EXEMPT => 0,
                 self::APPLICATION_FAILED => 0
             ];
+
+            $counterData->$counterKey = (object)[
+                ServiceBranch::RAF => clone $placeholderData,
+                ServiceBranch::NAVY => clone $placeholderData,
+                ServiceBranch::ARMY => clone $placeholderData,
+                ServiceBranch::HOME_GUARD => clone $placeholderData,
+            ];
+        } elseif(!isset($counterData->$counterKey->$branch)) {
+            $counterData->$counterKey->$branch = clone $placeholderData;
         }
 
-        $counterData->$counterKey->$type++;
+        $counterData->$counterKey->$branch->$type++;
 
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
-        Storage::disk('local')->delete($counterFile);
+        // Storage::disk('local')->delete($counterFile);
         if ($s3Bucket) {
             Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         }

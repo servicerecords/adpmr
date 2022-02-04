@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 
+use App\Rules\PhoneNumber;
+use App\Rules\Postcode;
+
 class ApplicantDetailsRequest extends DigitalRequest
 {
     /**
@@ -13,14 +16,33 @@ class ApplicantDetailsRequest extends DigitalRequest
     public function rules()
     {
         return [
-            'applicant-name' => 'required',
-            'applicant-email-address' => 'required|email',
-            'applicant-address-line-1' => 'required',
-            'applicant-address-town' => 'required',
-            'applicant-address-postcode' => 'required',
-            'applicant-address-country' => 'required',
-            'applicant-telephone' => 'required',
-            'applicant-details-transfer' => 'required',
+            'applicant-name' => [
+                'required',
+            ],
+            'applicant-email-address' => [
+                'required',
+                'email'
+            ],
+            'applicant-address-line-1' => [
+                'required'
+            ],
+            'applicant-address-town' => [
+                'required'
+            ],
+            'applicant-address-postcode' => [
+                'required',
+                new PostCode(null, strtoupper(request()->input('applicant-address-country')))
+            ],
+            'applicant-address-country' => [
+                'required'
+            ],
+            'applicant-telephone' => [
+                'required',
+                new PhoneNumber
+            ],
+            'applicant-details-transfer' => [
+                'required'
+            ],
         ];
     }
 
