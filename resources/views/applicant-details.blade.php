@@ -3,13 +3,13 @@
 
 @section('content')
     <form method="post" action="{{ route('applicant-details.save') }}" novalidate>
-        <x-error-summary :errors="$errors"></x-error-summary>
         <x-textfield label="Your full name"
                      field="applicant-name"
                      autocomplete="name"
                      :spellcheck="false"></x-textfield>
         <x-textfield label="Email address"
-                     field="applicant-email-address"></x-textfield>
+                     field="applicant-email-address"
+                     type="email"></x-textfield>
         <x-textfield label="Building number or name and street"
                      extra="line 1 of 2"
                      field="applicant-address-line-1"

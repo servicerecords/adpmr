@@ -4,7 +4,6 @@
 
 @section('content')
     <form method="post" action="{{ route('feedback.send') }}" novalidate>
-        <x-error-summary :errors="$errors"></x-error-summary>
         <x-radio-group label="Overall how do you feel about the service you received today?"
                        field="feedback-satisfaction"
                        :options="[

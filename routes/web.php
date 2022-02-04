@@ -44,6 +44,7 @@ Route::get('/feedback/complete', [\App\Http\Controllers\FeedbackController::clas
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
 Route::view('/accessibility-statement', 'accessibility-statement')->name('accessibility-statement');
 
+Route::get('/counter-url', [\App\Http\Controllers\ServiceController::class, 'counterLink']);
 Route::get('dynamo', function() {
     $counter = new Counter();
     $count = $counter->where('key', 'phase2-paid')->first();

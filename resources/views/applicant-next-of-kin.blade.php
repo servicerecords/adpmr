@@ -8,8 +8,6 @@
             relation from the list.
         </p>
 
-        <x-error-summary :errors="$errors"></x-error-summary>
-
         <div class="govuk-details__text {{ $errors->first('applicant-next-of-kin') ? ' govuk-!-margin-bottom-7': 'govuk-!-margin-bottom-4' }}">
             <ul class="govuk-list govuk-list--bullet">
                 <li>Spouse or Civil Partner</li>

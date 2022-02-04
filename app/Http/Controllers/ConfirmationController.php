@@ -15,16 +15,16 @@ class ConfirmationController extends Controller
      */
     public function paid(Request $request, $uuid)
     {
-        $payment  = Payment::getInstance()->verifyPayment();
+        $payment = Payment::getInstance()->verifyPayment();
         $application = Application::getInstance();
 
-        if($payment !== true) {
+        if ($payment !== true) {
+            $application->countApplication(Application::APPLICATION_FAILED, session('service'));
             return redirect()->route('check-answers')->with('payment_failed', true);
         }
-    
-        if(session('application-reference', false)) {
-    
-            $application->countApplication(Application::APPLICATION_PAID);
+
+        if (session('application-reference', false)) {
+            $application->countApplication(Application::APPLICATION_PAID, session('service'));
             session(['payment-status' => Application::APPLICATION_PAID]);
             $application->getServiceperson();
             $application->notifyBranch();
@@ -35,24 +35,25 @@ class ConfirmationController extends Controller
         }
 
         Application::getInstance()->cleanup();
-        return view('confirmation-error', [ 'payment' => $payment ]);
+        return view('confirmation-error', ['payment' => $payment]);
     }
 
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function free() {
+    public function free()
+    {
         $application = Application::getInstance();
-    
-        if($application->isFree()) {
+
+        if ($application->isFree()) {
             session(['payment-status' => Application::APPLICATION_EXEMPT]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 
-            $application->countApplication(Application::APPLICATION_EXEMPT);
+            $application->countApplication(Application::APPLICATION_EXEMPT, session('service'));
             Application::getInstance()->cleanup();
-            
+
             return redirect()->route('confirmation.complete');
         } else {
             return redirect()->route('cancel-application');
@@ -62,7 +63,8 @@ class ConfirmationController extends Controller
     /**
      * Show completed session page
      */
-    public function complete() {
+    public function complete()
+    {
         return view('confirmation-success');
     }
 
