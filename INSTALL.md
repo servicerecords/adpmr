@@ -21,7 +21,7 @@ $ ./artisan key:generate
 ```
 ### Creating Your Sentry.io Key
 
-If not already done, create a free account at [https://sentry.io](https://sentry.io). Once yur free account is create you will need to verify your account, however you will be presented with the 
+If not already done, create a free account at [https://sentry.io](https://sentry.io). Once yur free account is created you will need to verify your account, however you will be presented with the 
 
 Add your SENTRY_LARAVEL_DSN environment variable to your .env file. The line you need to add appears similar to
 
@@ -45,13 +45,13 @@ This is not a replacement for a fully fledge IIS, Apache or Nginx HTTP server. T
 ```
 $ ./artisan serve
 
-PHP 7.4.3 Development Server (http://127.0.0.1:8000) started
+PHP 8.0.4 Development Server (http://127.0.0.1:8000) started
 ```
 
-The frontend needs building
+The frontend needs building and any frontend changes should be monitored and re-built as they are updated.
 
 ```
-$ npm dev
+$ npm run watch
 ```
 
 
