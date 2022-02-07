@@ -519,14 +519,16 @@ class Application
         $placeholderData = (object)[
             self::APPLICATION_PAID => 0,
             self::APPLICATION_EXEMPT => 0,
-            self::APPLICATION_FAILED => 0
+            self::APPLICATION_FAILED => 0,
+            'last_update' => date('Y-m-d H:i:s')
         ];
 
         if (!isset($counterData->$counterKey)) {
             $placeholderData = (object)[
                 self::APPLICATION_PAID => 0,
                 self::APPLICATION_EXEMPT => 0,
-                self::APPLICATION_FAILED => 0
+                self::APPLICATION_FAILED => 0,
+                'last_update' => date('Y-m-d H:i:s')
             ];
 
             $counterData->$counterKey = (object)[
@@ -535,11 +537,12 @@ class Application
                 ServiceBranch::ARMY => clone $placeholderData,
                 ServiceBranch::HOME_GUARD => clone $placeholderData,
             ];
-        } elseif(!isset($counterData->$counterKey->$branch)) {
+        } elseif (!isset($counterData->$counterKey->$branch)) {
             $counterData->$counterKey->$branch = clone $placeholderData;
         }
 
         $counterData->$counterKey->$branch->$type++;
+        $counterData->$counterKey->$branch->last_update = date('Y-m-d H:i:s');
 
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         // Storage::disk('local')->delete($counterFile);
