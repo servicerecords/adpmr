@@ -8,12 +8,12 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.1 || ^8.0",
+        "php": "^8.0",
         "ext-calendar": "*",
-        "ext-gd": "*",
         "ext-fileinfo": "*",
-        "ext-zip": "*",
+        "ext-gd": "*",
         "ext-json": "*",
+        "ext-zip": "*",
         "alphagov/notifications-php-client": "^3.2",
         "aws/aws-sdk-php": "*",
         "aws/aws-sdk-php-laravel": "~3.0",
@@ -26,7 +26,8 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "mouf/nodejs-installer": "~1.0"
+        "mouf/nodejs-installer": "~1.0",
+        "sentry/sentry-laravel": "^2.11"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
