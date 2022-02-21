@@ -42,4 +42,8 @@ class Constant
     public const APPLICANT = 'applicant';
 
     public const SAVE_BUTTON_LABEL = 'Save and continue';
+
+    public const COUNTER_FILE = 'counters/application-counter.json';
+
+    private function __construct() {}
 }
