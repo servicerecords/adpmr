@@ -9,7 +9,10 @@ notifications:
     recipients:
       - toby@codesure.co.uk
 
-before_script: composer require phpunit/phpunit
+before_script:
+  - composer require phpunit/phpunit
+  - curl -sL https://sentry.io/get-cli/ | bash
+  - sentry-cli --help
 
 deploy:
   provider: cloudfoundry
