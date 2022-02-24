@@ -9,10 +9,19 @@ notifications:
     recipients:
       - toby@codesure.co.uk
 
+jobs:
+  include:
+    - name: Create release and notify Sentry of deploy
+      script: |
+        curl -sL https://sentry.io/get-cli/ | bash
+        export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+        sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+        sentry-cli releases set-commits $SENTRY_RELEASE --auto
+        sentry-cli releases finalize $SENTRY_RELEASE
+        sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+
 before_script:
   - composer require phpunit/phpunit
-  - curl -sL https://sentry.io/get-cli/ | bash
-  - sentry-cli --help
 
 deploy:
   provider: cloudfoundry
