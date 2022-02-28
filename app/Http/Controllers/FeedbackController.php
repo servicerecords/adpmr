@@ -34,11 +34,10 @@ class FeedbackController extends Controller
                 'feedback' => (null !== $request->input('feedback-improvement') ? $request->input('feedback-improvement') : 'No feedback given')
             ];
 
-            // @todo Make template ID for feedback come from an ENV var
             foreach ($serviceEmail as $email) {
                 $notifyClient->sendEmail(
                     Str::replace('[@]', '@', $email),
-                    env('FEEBBACK_TEMPLATE', '0f3b68c3-4589-4466-a743-73f73e841187'),
+                    env('FEEDBACK_TEMPLATE', '0f3b68c3-4589-4466-a743-73f73e841187'),
                     $params
                 );
             }

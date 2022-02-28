@@ -505,7 +505,7 @@ class Application
         $counterKey = Carbon::now()->startOfMonth()->toDateString() . '::' .
             Carbon::now()->endOfMonth()->toDateString();
         $s3Bucket = Config::get('filesystems.disks.s3.bucket', false);
-        $counterFile = 'counters/application-counter.json';
+        $counterFile = Constant::COUNTER_FILE;
         $counterData = new \stdClass();
 
         if (!Storage::disk('local')->exists($counterFile)) {
@@ -516,36 +516,107 @@ class Application
             $counterData = (object)json_decode(Storage::disk('local')->get($counterFile));
         }
 
+        $totalPlaceholder = (object)[
+            self::APPLICATION_PAID => 0,
+            self::APPLICATION_EXEMPT => 0,
+            self::APPLICATION_FAILED => 0,
+        ];
+
         $placeholderData = (object)[
             self::APPLICATION_PAID => 0,
             self::APPLICATION_EXEMPT => 0,
-            self::APPLICATION_FAILED => 0
+            self::APPLICATION_FAILED => 0,
+            'total' => clone $totalPlaceholder,
+            'last_update' => date('Y-m-d H:i:s')
         ];
 
         if (!isset($counterData->$counterKey)) {
-            $placeholderData = (object)[
-                self::APPLICATION_PAID => 0,
-                self::APPLICATION_EXEMPT => 0,
-                self::APPLICATION_FAILED => 0
-            ];
-
             $counterData->$counterKey = (object)[
                 ServiceBranch::RAF => clone $placeholderData,
                 ServiceBranch::NAVY => clone $placeholderData,
                 ServiceBranch::ARMY => clone $placeholderData,
                 ServiceBranch::HOME_GUARD => clone $placeholderData,
             ];
-        } elseif(!isset($counterData->$counterKey->$branch)) {
+        } elseif (!isset($counterData->$counterKey->$branch)) {
             $counterData->$counterKey->$branch = clone $placeholderData;
         }
 
+        if (!isset($counterData->total)) {
+            $counterData->total = clone $totalPlaceholder;
+
+            foreach ($counterData as $counters) {
+                $counterData->total->paid += $counters->paid ?? 0;
+                $counterData->total->paid += $counters->{ServiceBranch::RAF}->paid ?? 0;
+                $counterData->total->paid += $counters->{ServiceBranch::NAVY}->paid ?? 0;
+                $counterData->total->paid += $counters->{ServiceBranch::ARMY}->paid ?? 0;
+                $counterData->total->paid += $counters->{ServiceBranch::HOME_GUARD}->paid ?? 0;
+
+                $counterData->total->exempt += $counters->exempt ?? 0;
+                $counterData->total->exempt += $counters->{ServiceBranch::RAF}->exempt ?? 0;
+                $counterData->total->exempt += $counters->{ServiceBranch::NAVY}->exempt ?? 0;
+                $counterData->total->exempt += $counters->{ServiceBranch::ARMY}->exempt ?? 0;
+                $counterData->total->exempt += $counters->{ServiceBranch::HOME_GUARD}->exempt ?? 0;
+
+                $counterData->total->failed += $counters->failed ?? 0;
+                $counterData->total->failed += $counters->{ServiceBranch::RAF}->failed ?? 0;
+                $counterData->total->failed += $counters->{ServiceBranch::NAVY}->failed ?? 0;
+                $counterData->total->failed += $counters->{ServiceBranch::ARMY}->failed ?? 0;
+                $counterData->total->failed += $counters->{ServiceBranch::HOME_GUARD}->failed ?? 0;
+            }
+        }
+
+        if(!isset($counterData->total->$branch)) {
+            $counterData->total->$branch = clone $totalPlaceholder;
+            foreach ($counterData as $counters) {
+                $counterData->total->$branch->paid += (isset($counters->$branch)) ? $counters->$branch->paid ?? 0 : 0;
+                $counterData->total->$branch->exempt += (isset($counters->$branch)) ? $counters->$branch->exempt ?? 0 : 0;
+                $counterData->total->$branch->failed += (isset($counters->$branch)) ? $counters->$branch->failed ?? 0 : 0;
+            }
+        }
+
+        if (!isset($counterData->$counterKey->total)) {
+            $counterData->$counterKey->total = clone $totalPlaceholder;
+
+            $counterData->$counterKey->total->paid += $counters->$counterKey->paid ?? 0;
+            $counterData->$counterKey->total->paid += $counters->$counterKey->{ServiceBranch::RAF}->paid ?? 0;
+            $counterData->$counterKey->total->paid += $counters->$counterKey->{ServiceBranch::NAVY}->paid ?? 0;
+            $counterData->$counterKey->total->paid += $counters->$counterKey->{ServiceBranch::ARMY}->paid ?? 0;
+            $counterData->$counterKey->total->paid += $counters->$counterKey->{ServiceBranch::HOME_GUARD}->paid ?? 0;
+            $counterData->$counterKey->total->exempt += $counters->$counterKey->exempt ?? 0;
+            $counterData->$counterKey->total->exempt += $counters->$counterKey->{ServiceBranch::RAF}->exempt ?? 0;
+            $counterData->$counterKey->total->exempt += $counters->$counterKey->{ServiceBranch::NAVY}->exempt ?? 0;
+            $counterData->$counterKey->total->exempt += $counters->$counterKey->{ServiceBranch::ARMY}->exempt ?? 0;
+            $counterData->$counterKey->total->exempt += $counters->$counterKey->{ServiceBranch::HOME_GUARD}->exempt ?? 0;
+            $counterData->$counterKey->total->failed += $counters->$counterKey->failed ?? 0;
+            $counterData->$counterKey->total->failed += $counters->$counterKey->{ServiceBranch::RAF}->failed ?? 0;
+            $counterData->$counterKey->total->failed += $counters->$counterKey->{ServiceBranch::NAVY}->failed ?? 0;
+            $counterData->$counterKey->total->failed += $counters->$counterKey->{ServiceBranch::ARMY}->failed ?? 0;
+            $counterData->$counterKey->total->failed += $counters->$counterKey->{ServiceBranch::HOME_GUARD}->failed ?? 0;
+        }
+
+        if (!isset($counterData->$counterKey->$branch->total)) {
+            $counterData->$counterKey->$branch->total = clone $totalPlaceholder;
+
+            $counterData->$counterKey->$branch->total->paid +=   $counters->$counterKey->$branch->paid ?? 0;
+            $counterData->$counterKey->$branch->total->exempt += $counters->$counterKey->$branch->exempt ?? 0;
+            $counterData->$counterKey->$branch->total->failed += $counters->$counterKey->$branch->failed ?? 0;
+        }
+
         $counterData->$counterKey->$branch->$type++;
+        $counterData->$counterKey->$branch->last_update = date('Y-m-d H:i:s');
+
+        // Total up all values
+        $counterData->total->$type++;
+        $counterData->total->$branch->$type++;
+        $counterData->$counterKey->$branch->total->$type++;
 
         Storage::disk('local')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         // Storage::disk('local')->delete($counterFile);
         if ($s3Bucket) {
             Storage::disk('s3')->put($counterFile, json_encode($counterData, JSON_PRETTY_PRINT));
         }
+
+
     }
 
     /**
