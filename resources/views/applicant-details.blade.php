@@ -3,6 +3,12 @@
 
 @section('content')
     <form method="post" action="{{ route('applicant-details.save') }}" novalidate>
+        <x-textfield label="Your title"
+                     field="applicant-title"
+                     autocomplete="name"
+                     :mandatory="false"
+                     :spellcheck="false"
+                     hint="Include your title such as Mr, Mrs, Dr. Sir, etc"></x-textfield>
         <x-textfield label="Your full name"
                      field="applicant-name"
                      autocomplete="name"
