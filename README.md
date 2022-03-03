@@ -1,17 +1,29 @@
 # MOD ADPMR Service
 
-The ADPMR service is a relatively simple Laravel application. It runs on Laravel 8 with no requirement for a database or any persistent data of anykind. The front is a build of the Government Design System. 
+The ADPMR service is a relatively simple Laravel application. It runs on Laravel 8 with no requirement for a database or any persistent data of any kind. 
 
-Once cloned it is wise to run, 
+The front is a build of the Government Design System translated into Laravel components. It is not an exhaustive suite of components and should be updated and added to as the service requires. 
 
-    composer install
-    npm install
+Once the service has been cloned, create a new branch from the master branch and install all requirements. 
 
-This will install any PHP dependencies and whatever front end dependencies GDS prescribe in their design system.
+    $ composer install
+    $ npm install
+
+This will install all dependencies and ensure your environment is sufficient to run the service locally.
 
 ## Branching
 
-The development process runs essentially in 3 branches, *local*, *development* & *master* the local branch should always be a clone of *development*, as *master* could be behind *development* due to live issue fixes etc. Going forward as the project grows and the team becomes more agile each story/ticket should have it's own branch.  To merge *local* into *development* and *development* into *master* a PR should be created, a code review carried out, and a full test run before a PR is reviewed.
+When adding new features or fixing bugs, create a new branch from the Sandbox
+
+The development process runs essentially in 3 branches, *sandbox*, *qa* & *master* the local branch should always be a clone of *sandbox*, as *master* will almost always be behind *sandbox* due to live issue fixes etc. 
+
+## Development flow
+
+
+
+Going forward as the project grows and the team becomes more agile each story/ticket should have it's own branch.  
+
+To merge *local* into *development* and *development* into *master* a PR should be created, a code review carried out, and a full test run before a PR is reviewed.
 
 
 ## Third Party Dependencies

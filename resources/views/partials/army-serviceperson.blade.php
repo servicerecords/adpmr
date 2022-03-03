@@ -1,3 +1,6 @@
+<x-textfield label="Rank" field="serviceperson-rank"
+             :mandatory="false"></x-textfield>
+
 <x-date-field
     :label="session('serviceperson-died-in-service', \App\Models\Constant::NO) === \App\Models\Constant::NO ? 'Year of discharge' : 'Year of death in service'"
     field="serviceperson-discharged-date" hint="Approximate if you are unsure."

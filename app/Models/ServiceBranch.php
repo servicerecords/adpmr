@@ -155,7 +155,7 @@ class ServiceBranch
             ],
         ];
         
-        unset($this->branches[self::ARMY], $this->branches[self::HOME_GUARD]);
+        // unset($this->branches[self::ARMY], $this->branches[self::HOME_GUARD]);
     }
     
     /**

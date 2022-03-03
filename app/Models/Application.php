@@ -45,6 +45,7 @@ class Application
             ServiceBranch::ARMY => [
                 ['label' => 'Died in service', 'field' => 'serviceperson-died-in-service', 'route' => 'death-in-service', 'change' => 'if they died in service'],
                 ['label' => 'Year of death in service', 'field' => 'serviceperson-discharged-date', 'route' => 'serviceperson-details', 'change' => 'year of death in service'],
+                ['label' => 'Rank', 'field' => 'serviceperson-rank', 'route' => 'serviceperson-details', 'change' => 'rank'],
                 ['label' => 'Regt/Corps', 'field' => 'serviceperson-regiment', 'route' => 'serviceperson-details', 'change' => 'Regiment or Corps'],
                 ['label' => 'Why they left the Army', 'field' => 'serviceperson-reason-for-leaving', 'route' => 'serviceperson-details', 'change' => 'why they left the Army'],
                 ['label' => 'Territorial Army (TA)', 'field' => 'serviceperson-additional-service-ta', 'route' => 'serviceperson-details', 'change' => 'Territorial Army served'],

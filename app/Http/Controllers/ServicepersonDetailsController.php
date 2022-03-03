@@ -57,7 +57,7 @@ class ServicepersonDetailsController extends Controller
             return redirect()->route('check-answers');
         }
 
-        if (Application::getInstance()->deathCertificateRequired() === Constant::YES) {
+        if (Application::getInstance()->deathCertificateRequired()) {
             return redirect()->route('sending-documentation');
         }
 
