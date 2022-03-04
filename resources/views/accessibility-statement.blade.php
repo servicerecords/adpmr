@@ -51,7 +51,7 @@
 
     <h2 class="govuk-heading-m">Preparation of this accessibility statement</h2>
     <p class="govuk-body">This statement was prepared on 16th December 2020. It was last reviewed on 28th February 2022.</p>
-    <p class="govuk-body">This website was last tested on 11 February 2022. The test was carried out by Digital Accessibility Centre (DAC) Ltd.</p>
+    <p class="govuk-body">This website was last tested on 11th February 2022. The test was carried out by Digital Accessibility Centre (DAC) Ltd.</p>
     <p class="govuk-body">We used this approach to deciding on a sample of pages to test. The test combines technical auditing with disabled user feedback. The test does not list each specific area that requires change but highlights patterns of problems where they exist. The test covered the end-to-end digital service.</p>
 
 @endsection
