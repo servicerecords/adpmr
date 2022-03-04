@@ -5,7 +5,7 @@
     <form method="post" action="{{ route('applicant-details.save') }}" novalidate>
         <x-textfield label="Your title"
                      field="applicant-title"
-                     autocomplete="name"
+                     autocomplete="title"
                      :mandatory="false"
                      :spellcheck="false"
                      hint="Include your title such as Mr, Mrs, Dr. Sir, etc"></x-textfield>
