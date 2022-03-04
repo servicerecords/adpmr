@@ -122,6 +122,15 @@ class ApplicationCounter
      */
     public function increment($service, $status)
     {
+        if(!property_exists($this->data->{$this->key}->$service, $status))
+            $this->data->{$this->key}->$service->$status = 0;
+
+        if(!property_exists($this->data->{$this->key}->TOTAL, $status))
+            $this->data->{$this->key}->TOTAL->$status = 0;
+
+        if(!property_exists($this->data->TOTAL->$status, $status))
+            $this->data->TOTAL->$status->$status = 0;
+
         $this->data->{$this->key}->$service->$status++;
         $this->data->{$this->key}->TOTAL->$status++;
         $this->data->{$this->key}->$service->TOTAL++;
@@ -171,7 +180,7 @@ class ApplicationCounter
             ];
 
             foreach ($this->services as $service) {
-                $this->data->{$this->key}->service = (object)[
+                $this->data->{$this->key}->$service = (object)[
                     Application::APPLICATION_PAID => 0,
                     Application::APPLICATION_EXEMPT => 0,
                     Application::APPLICATION_FAILED => 0,
