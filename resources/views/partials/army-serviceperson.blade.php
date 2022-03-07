@@ -1,3 +1,11 @@
+@error('serviceperson-discharged-date-year')
+    @if($message === 'Date of death is before 1 Jan 1964')
+        <x-details :label="$message">
+            No records held where death is before 1 Jan 1964. Contact <a href="https://www.nationalarchives.gov.uk/">The National Archive</a>.
+        </x-details>
+    @endif
+@enderror
+
 <x-date-field
     :label="session('serviceperson-died-in-service', \App\Models\Constant::NO) === \App\Models\Constant::NO ? 'Year of discharge' : 'Year of death in service'"
     field="serviceperson-discharged-date" hint="Approximate if you are unsure."
