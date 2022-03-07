@@ -21,12 +21,7 @@
         has advice on making your device easier to use if you have a disability.</p>
 
     <h2 class="govuk-heading-m">How accessible this website is</h2>
-    <p class="govuk-body">Parts of this website are not fully accessible. For example:</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>Some heading elements are not consistent</li>
-        <li>Some error messages are not clearly associated with form controls</li>
-        <li>Some of the online pages are difficult to navigate using just a keyboard</li>
-    </ul>
+    <p class="govuk-body">This website is fully accessible.</p>
 
     <h2 class="govuk-heading-m">Feedback and contact information</h2>
     <p class="govuk-body">If you have accessibility feedback on this website, please use the
@@ -51,22 +46,12 @@
         Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
 
     <h2 class="govuk-heading-m">Compliance status</h2>
-    <p class="govuk-body">This website is partially compliant with the
-        <a href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard,
-        due to the non-compliances, listed below.</p>
-
-    <h2 class="govuk-heading-m">Non-accessible content</h2>
-    <p class="govuk-body">The content listed below is non-accessible for the following reasons.</p>
-    <ul class="govuk-list govuk-list--number">
-        <li>Some pages have illogical headings. This may make it difficult for users to identify which heading introduces the main content. This fails WCAG 2.1 success criterion 1.3.1 (Info and Relationships). We plan to fix this by removing multiple level 1 headings by February 2022. When we publish new content we’ll make sure our use of headings meets accessibility standards.</li>
-        <li>Some pages have no instructions to users that a form component is optional. This may be disorientating for users. This fails WCAG 2.1 success criterion 3.3.2 (Labels and Instructions). We plan to fix this by using labels and hint text to identify all optional components by February 2022. When we publish new content we’ll make sure that optional form components meet accessibility requirements.</li>
-        <li>Some page elements are not accessible to standard keyboard inputs. This may make it difficult for users to locate the error. This fails WCAG 2.1 success criterion 2.1.1 (Keyboard). We plan to fix this by repositioning the user focus to the correct component by February 2022. When we publish the new content we’ll make sure that all page elements meet accessibility requirements.</li>
-        <li>HTML autocomplete is not implemented or implemented incorrectly. This may make it difficult for a cognitive user to complete the form. This fails WCAG 2.1 success criterion 4.1.1 (Parsing). We plan to fix this by using the correct autocomplete attribute value by February 2022. When we publish the new content we’ll make sure that HTML autocomplete meets accessibility requirements.</li>
-    </ul>
+    <p class="govuk-body">This website is fully compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.
+        <a href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1</a> AA standard.</p>
 
     <h2 class="govuk-heading-m">Preparation of this accessibility statement</h2>
-    <p class="govuk-body">This statement was prepared on 16th December 2020. It was last reviewed on 22th January 2022.</p>
-    <p class="govuk-body">This website was last tested on 4 January 2022. The test was carried out by Digital Accessibility Centre (DAC) Ltd.</p>
+    <p class="govuk-body">This statement was prepared on 16th December 2020. It was last reviewed on 28th February 2022.</p>
+    <p class="govuk-body">This website was last tested on 11th February 2022. The test was carried out by Digital Accessibility Centre (DAC) Ltd.</p>
     <p class="govuk-body">We used this approach to deciding on a sample of pages to test. The test combines technical auditing with disabled user feedback. The test does not list each specific area that requires change but highlights patterns of problems where they exist. The test covered the end-to-end digital service.</p>
 
 @endsection
