@@ -8,7 +8,7 @@
                      autocomplete="title"
                      :mandatory="false"
                      :spellcheck="false"
-                     hint="Include your title such as Mr, Mrs, Dr., Sir, etc"></x-textfield>
+                     hint="Include your title such as Mr, Mrs, Dr, Sir, etc"></x-textfield>
         <x-textfield label="Your full name"
                      field="applicant-name"
                      autocomplete="name"
