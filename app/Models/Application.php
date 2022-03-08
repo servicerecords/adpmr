@@ -27,7 +27,7 @@ class Application
 
     private $standardQuestions = [
         ['label' => 'Service', 'field' => 'serviceperson-service', 'route' => 'service', 'change' => 'service branch'],
-        ['label' => 'Rank', 'field' => 'serviceperson-rank', 'route' => 'service', 'change' => 'service rank'],
+        ['label' => 'Rank', 'field' => 'serviceperson-service-rank', 'route' => 'serviceperson-details', 'change' => 'service rank'],
         ['label' => 'Service number', 'field' => 'serviceperson-service-number', 'route' => 'serviceperson-details', 'change' => 'service number'],
         ['label' => 'First name(s)', 'field' => 'serviceperson-first-name', 'route' => 'essential-information', 'change' => 'first name'],
         ['label' => 'Last name', 'field' => 'serviceperson-last-name', 'route' => 'essential-information', 'change' => 'last name'],

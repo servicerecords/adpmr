@@ -7,7 +7,7 @@
         <x-textfield
             :label="session('service') === \App\Models\ServiceBranch::HOME_GUARD ? 'National Registration number' : 'Service number'"
             field="serviceperson-service-number" :mandatory="false"></x-textfield>
-        <x-textfield label="Rank" field="serviceperson-rank"
+        <x-textfield label="Rank" field="serviceperson-service-rank"
                      :mandatory="false"></x-textfield>
         @includeWhen((session('service') === \App\Models\ServiceBranch::ARMY),        'partials.army-serviceperson')
         @includeWhen((session('service') === \App\Models\ServiceBranch::NAVY),        'partials.navy-serviceperson')
