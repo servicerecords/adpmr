@@ -72,7 +72,7 @@ class EssentialInformationRequest extends DigitalRequest
                 'digits:4',
                 'integer',
                 'validate_dob',
-                'max:' . ((in_array(session('service'), [ServiceBranch::ARMY, ServiceBranch::HOME_GUARD])) ? '1940' : date('Y') - 1),
+                'max:' . (date('Y') - 1),
                 $extraKey
             ]
         ];
