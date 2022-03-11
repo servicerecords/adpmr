@@ -122,19 +122,12 @@ class ApplicationCounter
      */
     public function increment($service, $status)
     {
-        if(!property_exists($this->data->{$this->key}->$service, $status))
-            $this->data->{$this->key}->$service->$status = 0;
-
-        if(!property_exists($this->data->{$this->key}->TOTAL, $status))
-            $this->data->{$this->key}->TOTAL->$status = 0;
-
-        if(!property_exists($this->data->TOTAL->$status, $status))
-            $this->data->TOTAL->$status->$status = 0;
-
         $this->data->{$this->key}->$service->$status++;
-        $this->data->{$this->key}->TOTAL->$status++;
         $this->data->{$this->key}->$service->TOTAL++;
-        $this->data->TOTAL->$status++;
+        $this->data->{$this->key}->TOTAL++;
+        $this->data->GRAND_TOTAL->$status++;
+        $this->data->GRAND_TOTAL->TOTAL++;
+
         $this->save();
     }
 
@@ -171,7 +164,7 @@ class ApplicationCounter
 
         if (!property_exists($this->data, $this->key)) {
             $this->data->{$this->key} = (object)[
-                'GRAND_TOTAL' => (object)[
+                'TOTAL' => (object)[
                     Application::APPLICATION_PAID => 0,
                     Application::APPLICATION_EXEMPT => 0,
                     Application::APPLICATION_FAILED => 0,
@@ -230,7 +223,7 @@ class ApplicationCounter
         foreach ($this->data as $key => $value) {
             if ($key != 'GRAND_TOTAL' && $key != 'LAST_UPDATE') {
                 if (!property_exists($this->data->$key, 'TOTAL')) {
-                    $this->data->$key->TOTAL = 0;
+                    $this->data->$key->TOTAL = clone $grandTotal;
                 }
 
                 $keyTotal = 0;
@@ -238,24 +231,20 @@ class ApplicationCounter
                     $serviceTotal = 0;
                     if (property_exists($this->data->$key, $service)) {
                         foreach ($this->statuses as $status) {
-//                            if (gettype($this->data->$key->$service) == 'object') {
-                                if (property_exists($this->data->$key->$service, $status)) {
-                                    $keyTotal += $this->data->$key->$service->$status;
-                                    $serviceTotal += $this->data->$key->$service->$status;
-                                    $grandTotal->$status += $this->data->$key->$service->$status;
-                                } else {
-                                    $this->data->$key->$service->$status = 0;
-                                }
-//                            }
+                            if (property_exists($this->data->$key->$service, $status)) {
+                                $keyTotal += $this->data->$key->$service->$status;
+                                $serviceTotal += $this->data->$key->$service->$status;
+                                $grandTotal->$status += $this->data->$key->$service->$status;
+                            } else {
+                                $this->data->$key->$service->$status = 0;
+                            }
                         }
 
-//                        if (gettype($this->data->$key->$service) == 'object') {
-                            if (!property_exists($this->data->$key->$service, 'TOTAL')) {
-                                $this->data->$key->$service->TOTAL = 0;
-                            }
+                        if (!property_exists($this->data->$key->$service, 'TOTAL')) {
+                            $this->data->$key->$service->TOTAL = 0;
+                        }
 
-                            $this->data->$key->$service->TOTAL = $serviceTotal;
-//                        }
+                        $this->data->$key->$service->TOTAL = $serviceTotal;
 
                     }
                 }
