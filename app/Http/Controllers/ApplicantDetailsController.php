@@ -30,6 +30,7 @@ class ApplicantDetailsController extends Controller
      * @var string[]
      */
     protected $fields = [
+        'applicant-title',
         'applicant-name',
         'applicant-email-address',
         'applicant-address-line-1',

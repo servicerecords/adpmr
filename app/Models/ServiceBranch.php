@@ -31,6 +31,7 @@ class ServiceBranch
                 'CODE' => 'SEA',
                 'FIELDS' => [
                     'SIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-enlisted-date-day',
                         'serviceperson-enlisted-date-month',
@@ -41,6 +42,7 @@ class ServiceBranch
                         'serviceperson-discharged-information'
                     ],
                     'DIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-enlisted-date-day',
                         'serviceperson-enlisted-date-month',
@@ -61,6 +63,7 @@ class ServiceBranch
                 'CODE' => 'LAN',
                 'FIELDS' => [
                     'DIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-discharged-date-day',
                         'serviceperson-discharged-date-month',
@@ -68,6 +71,7 @@ class ServiceBranch
                         'serviceperson-regiment',
                     ],
                     'SIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-discharged-date-day',
                         'serviceperson-discharged-date-month',
@@ -96,6 +100,7 @@ class ServiceBranch
                 'CODE' => 'AIR',
                 'FIELDS' => [
                     'SIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-enlisted-date-day',
                         'serviceperson-enlisted-date-month',
@@ -106,6 +111,7 @@ class ServiceBranch
                         'serviceperson-discharged-information'
                     ],
                     'DIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-enlisted-date-day',
                         'serviceperson-enlisted-date-month',
@@ -126,6 +132,7 @@ class ServiceBranch
                 'CODE' => 'LAN',
                 'FIELDS' => [
                     'SIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-county-served',
                         'serviceperson-address-when-joined',
@@ -138,6 +145,7 @@ class ServiceBranch
                         'serviceperson-discharged-date-year',
                     ],
                     'DIS' => [
+                        'serviceperson-service-rank',
                         'serviceperson-service-number',
                         'serviceperson-county-served',
                         'serviceperson-address-when-joined',

@@ -10,6 +10,7 @@ class Applicant
 {
     private static $instance = null;
     private $formFields = [
+        ['label' => '', 'field' => 'applicant-title', 'mandatory' => false],
         ['label' => '', 'field' => 'applicant-name', 'mandatory' => true],
         ['label' => '', 'field' => 'applicant-email-address', 'mandatory' => true],
         ['label' => '', 'field' => 'applicant-address-line-1', 'mandatory' => true],
