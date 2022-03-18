@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\ApplicationCounter;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
@@ -19,17 +20,17 @@ class ConfirmationController extends Controller
         $application = Application::getInstance();
 
         if ($payment !== true) {
-            $application->countApplication(Application::APPLICATION_FAILED, session('service'));
+            ApplicationCounter::getInstance()->increment(session('service'), Application::APPLICATION_FAILED);
             return redirect()->route('check-answers')->with('payment_failed', true);
         }
 
         if (session('application-reference', false)) {
-            $application->countApplication(Application::APPLICATION_PAID, session('service'));
             session(['payment-status' => Application::APPLICATION_PAID]);
             $application->getServiceperson();
             $application->notifyBranch();
             $application->notifyApplicant();
 
+            ApplicationCounter::getInstance()->increment(session('service'), Application::APPLICATION_PAID);
             Application::getInstance()->cleanup();
             return redirect()->route('confirmation.complete');
         }
@@ -51,7 +52,7 @@ class ConfirmationController extends Controller
             $application->notifyBranch();
             $application->notifyApplicant();
 
-            $application->countApplication(Application::APPLICATION_EXEMPT, session('service'));
+            ApplicationCounter::getInstance()->increment(session('service'), Application::APPLICATION_EXEMPT);
             Application::getInstance()->cleanup();
 
             return redirect()->route('confirmation.complete');

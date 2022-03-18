@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ServiceBranch;
 use App\Rules\Day;
 use App\Rules\Month;
 use Carbon\Carbon;
@@ -48,6 +49,10 @@ class EssentialInformationRequest extends DigitalRequest
      */
     public function rules()
     {
+        $extraKey = null;
+        if (in_array(session('service'), [ServiceBranch::ARMY, ServiceBranch::HOME_GUARD]))
+            $extraKey = 'min:1940';
+
         return [
             'serviceperson-first-name' => 'required',
             'serviceperson-last-name' => 'required',
@@ -62,7 +67,14 @@ class EssentialInformationRequest extends DigitalRequest
                 new Month(),
                 'nullable'
             ],
-           'serviceperson-date-of-birth-date-year' => 'required|digits:4|integer|validate_dob|max:' . date('Y') - 1,
+            'serviceperson-date-of-birth-date-year' => [
+                'required',
+                'digits:4',
+                'integer',
+                'validate_dob',
+                'max:' . (date('Y') - 1),
+                $extraKey
+            ]
         ];
     }
 
@@ -71,12 +83,14 @@ class EssentialInformationRequest extends DigitalRequest
      */
     public function messages()
     {
+
         return [
             'serviceperson-first-name.required' => 'Enter any first names',
             'serviceperson-last-name.required' => 'Enter a last name',
             'serviceperson-date-of-birth-date-year.digits' => 'The date of birth\'s year must be 4 characters in length',
             'serviceperson-date-of-birth-date-year.required' => 'Enter a year of birth, even if it is an estimate',
             'serviceperson-date-of-birth-date-year.max' => 'Enter a date of birth (even if partial) that is in the past',
+            'serviceperson-date-of-birth-date-year.min' => 'Service record not held',
             'serviceperson-date-of-birth-date-year.validate_dob' => 'Enter a valid date of birth'
         ];
     }
