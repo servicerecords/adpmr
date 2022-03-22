@@ -52,6 +52,9 @@ class EssentialInformationRequest extends DigitalRequest
         $extraKey = null;
         if (in_array(session('service'), [ServiceBranch::ARMY, ServiceBranch::HOME_GUARD]))
             $extraKey = 'min:1940';
+        
+        if (in_array(session('service'), [ServiceBranch::NAVY]))
+            $extraKey = 'min:1890';
 
         return [
             'serviceperson-first-name' => 'required',
