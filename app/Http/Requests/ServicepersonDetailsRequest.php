@@ -87,7 +87,7 @@ class ServicepersonDetailsRequest extends DigitalRequest
                         'nullable',
                         'integer',
                         'max:' . date('Y'),
-                        'min:1920',
+                        session('serviceperson-died-in-service', Constant::NO) == Constant::YES ? 'min:1920' : false,
                     ]
                 ];
                 break;
