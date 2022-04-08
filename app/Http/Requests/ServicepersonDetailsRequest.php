@@ -37,7 +37,11 @@ class ServicepersonDetailsRequest extends DigitalRequest
                             'Enter a valid day they joined'
                         )],
                     'serviceperson-enlisted-date-month' => ['nullable',  new Month('Enter a valid month they joined')],
-                    'serviceperson-enlisted-date-year'  => 'nullable|integer|max:' . date('Y'),
+                    'serviceperson-enlisted-date-year'  => ['nullable',
+                        'integer',
+                        'max:' . date('Y'),
+                        'min:1926'
+                    ],
                     'serviceperson-discharged-date-day' => ['nullable',
                         new Day(
                             request()->input('serviceperson-discharged-date-month'),
@@ -113,6 +117,7 @@ class ServicepersonDetailsRequest extends DigitalRequest
                         session('serviceperson-died-in-service', Constant::YES) === Constant::YES ?
                             'Year of death in service must be in the past' :
                             'Year they must be in the past',
+                    'serviceperson-enlisted-date-year.min' => 'Service record not held',
                 ];
                 break;
 
