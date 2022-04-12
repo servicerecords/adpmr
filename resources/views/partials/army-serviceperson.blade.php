@@ -62,6 +62,5 @@
 
     <x-text-area label="Further information"
                  field="serviceperson-additional-information"
-                 hint="For example Ranks, Grades, Regiments, National Insurance number."
                  :mandatory="false" :character-limit="200"></x-text-area>
 @endif
